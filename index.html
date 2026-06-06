@@ -182,9 +182,11 @@
     .pos-buttons { display:flex; flex-direction:column; gap:14px; width:100%; max-width:340px; }
     .pos-btn { background:white; border:2px solid var(--border); border-radius:16px; padding:18px 20px; cursor:pointer; display:flex; align-items:center; gap:16px; box-shadow:var(--shadow); transition:all 0.15s; width:100%; text-align:left; }
     .pos-btn:active { transform:scale(0.97); border-color:var(--brown-mid); }
+    .pos-btn.locked { opacity:0.42; cursor:not-allowed; pointer-events:none; filter:grayscale(0.4); }
     .pos-icon { font-size:32px; flex-shrink:0; }
     .pos-title { font-size:16px; font-weight:700; color:var(--brown); display:block; }
     .pos-sub   { font-size:13px; color:var(--text-muted); display:block; margin-top:2px; }
+    .pos-locked-badge { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#b91c1c; background:#fee2e2; border-radius:6px; padding:2px 8px; margin-top:5px; display:inline-block; }
 
     /* ── JOB DESCRIPTION SCREEN ── */
     #job-desc-screen { background: var(--cream); }
@@ -307,18 +309,20 @@
           <span class="pos-sub" data-i18n="pos1Sub">Einstiegsposition, auch für Quereinsteiger</span>
         </span>
       </button>
-      <button class="pos-btn" onclick="setPosition('pos2')">
+      <button class="pos-btn locked">
         <span class="pos-icon">🔥</span>
         <span>
           <span class="pos-title" data-i18n="pos2Title">Koch / Grill</span>
           <span class="pos-sub" data-i18n="pos2Sub">Fleisch, Fisch & Gemüse am Grill</span>
+          <span class="pos-locked-badge">Derzeit nicht gesucht</span>
         </span>
       </button>
-      <button class="pos-btn" onclick="setPosition('pos3')">
+      <button class="pos-btn locked">
         <span class="pos-icon">🍳</span>
         <span>
           <span class="pos-title" data-i18n="pos3Title">Koch / Pfannen / Fritteuse</span>
           <span class="pos-sub" data-i18n="pos3Sub">Pfannengerichte, Beilagen & Saucen</span>
+          <span class="pos-locked-badge">Derzeit nicht gesucht</span>
         </span>
       </button>
     </div>
