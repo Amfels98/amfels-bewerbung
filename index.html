@@ -406,7 +406,7 @@
           <div class="error-msg" id="err-phone" data-i18n="errRequired">Pflichtfeld</div>
         </div>
         <div class="form-group">
-          <label><span data-i18n="email">E-Mail</span> <span class="req">*</span></label>
+          <label><span data-i18n="email">E-Mail</span></label>
           <input type="email" id="email" inputmode="email" autocomplete="email">
           <div class="error-msg" id="err-email" data-i18n="errEmail">Bitte gültige E-Mail eingeben</div>
         </div>
@@ -1389,10 +1389,11 @@ function validateStep(n) {
   var ok = true;
   if (n === 1) {
     ok = required('firstName') & required('lastName') & required('birthDate') &
-         required('phone') & required('email') &
+         required('phone') &
          requiredRadio('workPermit','err-workPermit') &
          requiredRadio('workType','err-workType') &
          required('startDate');
+    // E-Mail optional aber format prüfen wenn angegeben
     var emailEl = document.getElementById('email');
     if (emailEl && emailEl.value && !/\S+@\S+\.\S+/.test(emailEl.value)) {
       emailEl.classList.add('error');
