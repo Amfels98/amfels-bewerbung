@@ -174,6 +174,36 @@
     .schedule-info .s-row:last-child { margin-bottom: 0; }
     .schedule-info .s-icon { flex-shrink: 0; }
 
+    /* ── POSITION SCREEN ── */
+    #position-screen { background: var(--cream); }
+    .pos-content { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:32px 20px; gap:20px; text-align:center; }
+    .pos-content h2 { font-size:22px; font-weight:700; color:var(--brown); }
+    .pos-content p  { font-size:14px; color:var(--text-muted); }
+    .pos-buttons { display:flex; flex-direction:column; gap:14px; width:100%; max-width:340px; }
+    .pos-btn { background:white; border:2px solid var(--border); border-radius:16px; padding:18px 20px; cursor:pointer; display:flex; align-items:center; gap:16px; box-shadow:var(--shadow); transition:all 0.15s; width:100%; text-align:left; }
+    .pos-btn:active { transform:scale(0.97); border-color:var(--brown-mid); }
+    .pos-icon { font-size:32px; flex-shrink:0; }
+    .pos-title { font-size:16px; font-weight:700; color:var(--brown); display:block; }
+    .pos-sub   { font-size:13px; color:var(--text-muted); display:block; margin-top:2px; }
+
+    /* ── JOB DESCRIPTION SCREEN ── */
+    #job-desc-screen { background: var(--cream); }
+    .jd-scroll { flex:1; overflow-y:auto; padding:20px 16px 120px; max-width:600px; margin:0 auto; width:100%; }
+    .jd-hero { background:var(--brown); border-radius:16px; padding:20px; margin-bottom:16px; text-align:center; }
+    .jd-hero-icon { font-size:40px; margin-bottom:8px; }
+    .jd-hero-title { color:white; font-size:20px; font-weight:700; }
+    .jd-hero-pos   { color:rgba(255,255,255,0.7); font-size:14px; margin-top:4px; }
+    .jd-section { background:white; border-radius:14px; padding:18px; margin-bottom:12px; box-shadow:var(--shadow); }
+    .jd-section-title { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:var(--brown-light); margin-bottom:12px; }
+    .jd-list { list-style:none; }
+    .jd-list li { font-size:14px; color:var(--text); padding:5px 0; border-bottom:1px solid #f5f5f5; display:flex; gap:8px; line-height:1.5; }
+    .jd-list li:last-child { border-bottom:none; }
+    .jd-list li::before { content:'→'; color:var(--brown-light); flex-shrink:0; font-weight:700; }
+    .jd-warn { background:#fff3cd; border:1.5px solid #ffc107; border-radius:12px; padding:12px 14px; display:flex; gap:8px; font-size:13px; color:#856404; font-weight:600; margin-bottom:12px; }
+    .jd-confirm-bar { position:fixed; bottom:0; left:0; right:0; background:white; border-top:1px solid var(--border); padding:12px 16px; z-index:100; max-width:600px; margin:0 auto; }
+    .jd-confirm-btn { width:100%; padding:15px; background:var(--green); color:white; border:none; border-radius:12px; font-size:15px; font-weight:700; cursor:pointer; font-family:inherit; line-height:1.3; }
+    .jd-back-btn { width:100%; padding:10px; background:transparent; border:none; color:var(--text-muted); font-size:13px; cursor:pointer; margin-top:6px; font-family:inherit; }
+
     /* ── HINT TEXT ── */
     .hint { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
 
@@ -243,6 +273,72 @@
         </span>
       </button>
     </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SCREEN 1b – POSITION (nur Küche)
+══════════════════════════════════════ -->
+<div id="position-screen" class="screen">
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <div class="top-bar-logo"><img src="logo.png" alt="Am Fels"></div>
+      <div>
+        <div class="top-bar-title">👨‍🍳 <span data-i18n="kitchen">Küche</span></div>
+        <div class="top-bar-sub" data-i18n="bewerbung">Bewerbung</div>
+      </div>
+    </div>
+    <button class="lang-toggle-btn" onclick="toggleLang()">DE / HR</button>
+  </div>
+  <div class="pos-content">
+    <div>
+      <h2 data-i18n="posTitle">Für welche Position bewirbst du dich?</h2>
+      <p data-i18n="posDesc">Wähle deine gewünschte Stelle</p>
+    </div>
+    <div class="pos-buttons">
+      <button class="pos-btn" onclick="setPosition('pos1')">
+        <span class="pos-icon">🥗</span>
+        <span>
+          <span class="pos-title" data-i18n="pos1Title">Salate / Spülen / Dessert</span>
+          <span class="pos-sub" data-i18n="pos1Sub">Einstiegsposition, auch für Quereinsteiger</span>
+        </span>
+      </button>
+      <button class="pos-btn" onclick="setPosition('pos2')">
+        <span class="pos-icon">🔥</span>
+        <span>
+          <span class="pos-title" data-i18n="pos2Title">Koch / Grill</span>
+          <span class="pos-sub" data-i18n="pos2Sub">Fleisch, Fisch & Gemüse am Grill</span>
+        </span>
+      </button>
+      <button class="pos-btn" onclick="setPosition('pos3')">
+        <span class="pos-icon">🍳</span>
+        <span>
+          <span class="pos-title" data-i18n="pos3Title">Koch / Pfannen / Fritteuse</span>
+          <span class="pos-sub" data-i18n="pos3Sub">Pfannengerichte, Beilagen & Saucen</span>
+        </span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SCREEN 1c – JOB DESCRIPTION
+══════════════════════════════════════ -->
+<div id="job-desc-screen" class="screen">
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <div class="top-bar-logo"><img src="logo.png" alt="Am Fels"></div>
+      <div>
+        <div class="top-bar-title" id="jd-top-title">Stellenbeschreibung</div>
+        <div class="top-bar-sub">Restaurant Am Fels</div>
+      </div>
+    </div>
+    <button class="lang-toggle-btn" onclick="toggleLang()">DE / HR</button>
+  </div>
+  <div class="jd-scroll" id="jd-content"></div>
+  <div class="jd-confirm-bar">
+    <button class="jd-confirm-btn" id="jd-confirm-btn" onclick="confirmJobDesc()"></button>
+    <button class="jd-back-btn" onclick="goBackFromJobDesc()" data-i18n="back">Zurück</button>
   </div>
 </div>
 
@@ -677,6 +773,11 @@ var LANG = {
     availTitle:"Verfügbarkeit",
     startDate:"Frühester Eintrittstermin",
     workType:"Gewünschter Umfang",
+    posTitle:"Für welche Position bewirbst du dich?", posDesc:"Wähle deine gewünschte Stelle",
+    pos1Title:"Salate / Spülen / Dessert", pos1Sub:"Einstiegsposition, auch für Quereinsteiger",
+    pos2Title:"Koch / Grill", pos2Sub:"Fleisch, Fisch & Gemüse am Grill",
+    pos3Title:"Koch / Pfannen / Fritteuse", pos3Sub:"Pfannengerichte, Beilagen & Saucen",
+    confirmRead:"Ich habe die Aufgaben gelesen und möchte mich bewerben →",
     fullTime:"Vollzeit", partTime:"Teilzeit", miniJob:"Minijob",
     workPermitNote:"Bitte beschreibe deinen Status",
     workPermitNotePh:"z.B. Aufenthaltstitel beantragt, EU-Bürger...",
@@ -753,6 +854,11 @@ var LANG = {
     startDate:"Najraniji datum početka rada",
     workType:"Željeni opseg rada",
     fullTime:"Puno radno vrijeme", partTime:"Nepuno radno vrijeme",
+    posTitle:"Za koju poziciju se prijavljuješ?", posDesc:"Odaberi željeno radno mjesto",
+    pos1Title:"Salate / Pranje suđa / Deserti", pos1Sub:"Početna pozicija, prikladna i za početnike",
+    pos2Title:"Kuhar / Roštilj", pos2Sub:"Meso, riba & povrće na roštilju",
+    pos3Title:"Kuhar / Tave / Friteza", pos3Sub:"Jela na tavi, prilozi & umaci",
+    confirmRead:"Pročitao/la sam zadatke i želim se prijaviti →",
     miniJob:"Mini posao",
     workPermitNote:"Molimo opiši svoj status",
     workPermitNotePh:"npr. boravišna dozvola u postupku, državljanin EU...",
@@ -819,8 +925,60 @@ var LANG = {
 // ╔══════════════════════════════════════╗
 // ║  STATE                               ║
 // ╚══════════════════════════════════════╝
-var state = { lang: 'de', area: null, step: 1, photoBlob: null, cvFile: null };
+var state = { lang: 'de', area: null, position: null, step: 1, photoBlob: null, cvFile: null };
 var TOTAL_STEPS = 6;
+
+// ╔══════════════════════════════════════╗
+// ║  JOB DESCRIPTIONS                    ║
+// ╚══════════════════════════════════════╝
+var JD = {
+  service: {
+    de: {
+      icon:'🍷', title:'Service',
+      tasks:['Thekenbereich auffüllen und in Ordnung halten','Getränke aus dem Keller holen','Gäste freundlich und aufmerksam bedienen – Freundlichkeit ist bei uns Pflicht','Tische eindecken und abräumen','Arbeiten mit unserem Kassensystem Orderman (lernst du bei uns)','Unsere Gerichte kennen und den Gästen sicher erklären können','Sauberkeit im gesamten Servicebereich','Leergut, leere Weinflaschen und Müll entsorgen'],
+      req:['Schnelligkeit – auch wenn viel los ist','Belastbarkeit und ein kühler Kopf in Stresssituationen','Zuverlässigkeit und Teamgeist','Bereitschaft, samstags zu arbeiten','Lust, dazuzulernen'],
+      warn:'Alkohol und Drogen sind am Arbeitsplatz strikt verboten – null Toleranz',
+      hours:['Neben dem regulären Betrieb finden Veranstaltungen statt – mal seltener, mal häufiger, auch außerhalb der normalen Öffnungszeiten. Die Mitarbeit dabei ist fester Bestandteil der Arbeit.','An Feiertagen wird grundsätzlich gearbeitet, je nach Veranstaltung oft auch mittags.'],
+      dress:['Grundsätzlich gepflegtes Erscheinungsbild','Schwarze Hose, schwarze Schuhe und schwarzes Oberteil (vorzugsweise)','Hemd oder Polo (Damen und Herren)','Bei Damen ist auch ein T-Shirt mit Ärmeln okay – aber kein weites, oversize oder schlabbriges Shirt']
+    },
+    hr: {
+      icon:'🍷', title:'Usluživanje',
+      tasks:['Punjenje i održavanje šanka u redu','Donošenje pića iz podruma','Ljubazno i pažljivo posluživanje gostiju – ljubaznost je kod nas obavezna','Postavljanje i raščišćavanje stolova','Rad s našim blagajničkim sustavom Orderman (naučit ćeš kod nas)','Poznavanje naših jela i sposobnost da ih gostima sigurno objasniš','Čistoća u cijelom prostoru za posluživanje','Odnošenje ambalaže, praznih boca vina i smeća'],
+      req:['Brzinu – i kad je velika gužva','Otpornost i hladnu glavu u stresnim situacijama','Pouzdanost i timski duh','Spremnost za rad subotom','Volju za učenjem'],
+      warn:'Konzumacija alkohola i droga na radnom mjestu strogo je zabranjena – nulta tolerancija',
+      hours:['Osim redovnog rada kod nas se održavaju i razna događanja – ponekad rjeđe, ponekad češće, i izvan uobičajenog radnog vremena. Sudjelovanje u tome obavezan je dio posla.','Praznicima se kod nas u pravilu radi – ovisno o događanjima često i u podne.'],
+      dress:['Općenito uredan i njegovan izgled','Crne hlače, crne cipele i crni gornji dio (po mogućnosti)','Košulja ili polo majica (žene i muškarci)','Kod žena je u redu i majica s rukavima – ali ne široka, oversize ili neuredna majica']
+    }
+  },
+  kitchen: {
+    common: {
+      de: {
+        req:['Sauberkeit und Hygiene (HACCP) sind Pflicht','Schnelligkeit und Belastbarkeit, auch bei vollem Haus','Zuverlässigkeit und Pünktlichkeit','Teamfähigkeit – in der Küche zählt jeder Handgriff','Bereitschaft, samstags zu arbeiten','Lust, dazuzulernen','Sorgsamer Umgang mit Lebensmitteln – keine Verschwendung','Frische ist bei uns ein absolutes Muss','Wareneingang ist donnerstags und freitags mittags – Anwesenheit und Mithilfe sind Pflicht'],
+        warn:'Alkohol und Drogen sind am Arbeitsplatz strikt verboten – null Toleranz',
+        hours:['Neben dem regulären Betrieb finden Veranstaltungen statt – mal seltener, mal häufiger, auch außerhalb der normalen Öffnungszeiten. Die Mitarbeit dabei ist fester Bestandteil der Arbeit.','An Feiertagen wird grundsätzlich gearbeitet, je nach Veranstaltung oft auch mittags.'],
+        dress:['Richtige Arbeitskleidung wird selbst mitgebracht: Kochjacke oder ordentliches Oberteil, Kochhose oder schwarze Hose, Schürze','Geschlossene, rutschfeste Schuhe sind Pflicht','Saubere, gepflegte Kleidung, gepflegtes Erscheinungsbild']
+      },
+      hr: {
+        req:['Čistoća i higijena (HACCP) su obavezni','Brzina i otpornost, i kad je velika gužva','Pouzdanost i točnost','Timski duh – u kuhinji je svaki potez važan','Spremnost za rad subotom','Volja za učenjem','Pažljivo postupanje s namirnicama – bez bacanja hrane','Svježina je kod nas apsolutno obavezna','Prijem robe je četvrtkom i petkom u podne – prisutnost i pomoć su obavezni'],
+        warn:'Konzumacija alkohola i droga na radnom mjestu strogo je zabranjena – nulta tolerancija',
+        hours:['Osim redovnog rada kod nas se održavaju i razna događanja – ponekad rjeđe, ponekad češće, i izvan uobičajenog radnog vremena. Sudjelovanje u tome obavezan je dio posla.','Praznicima se kod nas u pravilu radi – ovisno o događanjima često i u podne.'],
+        dress:['Odgovarajuću radnu odjeću donosiš sam/sama: kuharsku jaknu ili uredan gornji dio, kuharske ili crne hlače, pregaču','Zatvorene cipele otporne na klizanje su obavezne','Čista i uredna odjeća, njegovan izgled']
+      }
+    },
+    pos1: {
+      de: { icon:'🥗', title:'Salate / Spülen / Dessert', tasks:['Salate und kalte Vorspeisen anrichten','Desserts vorbereiten und anrichten','Geschirr, Töpfe und Besteck spülen (Maschine und Hand)','Spülküche und Arbeitsbereich sauber halten','Zuarbeit für die warme Küche (putzen, schneiden, vorbereiten)','Waren annehmen und einräumen','Einstiegsposition – auch für motivierte Quereinsteiger geeignet'] },
+      hr: { icon:'🥗', title:'Salate / Pranje suđa / Deserti', tasks:['Pripremanje i serviranje salata i hladnih predjela','Priprema i serviranje deserta','Pranje posuđa, lonaca i pribora (stroj i ručno)','Održavanje čistoće prostora za pranje i radnog mjesta','Pomoć toploj kuhinji (čišćenje, rezanje, priprema)','Preuzimanje i slaganje robe','Početnička pozicija – prikladna i za motivirane osobe bez iskustva'] }
+    },
+    pos2: {
+      de: { icon:'🔥', title:'Koch / Grill', tasks:['Fleisch, Fisch und Gemüse am Grill auf den Punkt zubereiten','Garstufen sicher beherrschen','Mise en place für den Grillposten','Anrichten gemeinsam mit den anderen Posten','Timing und Temperatur im Blick behalten','Sauberkeit am Posten','Berufserfahrung von Vorteil'] },
+      hr: { icon:'🔥', title:'Kuhar / Roštilj', tasks:['Priprema mesa, ribe i povrća na roštilju, točno na željeni stupanj pečenja','Sigurno poznavanje stupnjeva pečenja','Mise en place za poziciju roštilja','Slaganje tanjura zajedno s ostalim pozicijama','Praćenje vremena i temperature','Čistoća na radnoj poziciji','Radno iskustvo je prednost'] }
+    },
+    pos3: {
+      de: { icon:'🍳', title:'Koch / Pfannen / Fritteuse', tasks:['Pfannengerichte, Beilagen und Saucen zubereiten','Fritteuse bedienen (Frittierzeiten, Temperatur, Ölwechsel)','Mehrere Bestellungen parallel im Griff haben','Mise en place für den Posten','Anrichten','Sauberkeit am Posten','Berufserfahrung von Vorteil'] },
+      hr: { icon:'🍳', title:'Kuhar / Tave / Friteza', tasks:['Priprema jela na tavi, priloga i umaka','Rukovanje fritezom (vrijeme prženja, temperatura, izmjena ulja)','Paralelno vođenje više narudžbi','Mise en place za poziciju','Slaganje tanjura','Čistoća na radnoj poziciji','Radno iskustvo je prednost'] }
+    }
+  }
+};
 
 // ╔══════════════════════════════════════╗
 // ║  INIT                                ║
@@ -886,16 +1044,93 @@ function showScreen(id) {
 // ╚══════════════════════════════════════╝
 function setArea(area) {
   state.area = area;
+  state.position = null;
   state.step = 1;
+  if (area === 'kitchen') {
+    showScreen('position-screen');
+  } else {
+    showJobDesc();
+  }
+}
+
+function setPosition(pos) {
+  state.position = pos;
+  showJobDesc();
+}
+
+function showJobDesc() {
+  var l = state.lang;
+  var d, posLabel = '';
+
+  if (state.area === 'service') {
+    d = JD.service[l];
+  } else {
+    var posData = JD.kitchen[state.position][l];
+    var common  = JD.kitchen.common[l];
+    posLabel = posData.title;
+    d = {
+      icon: posData.icon,
+      title: l === 'de' ? 'Küche' : 'Kuhinja',
+      tasks: posData.tasks,
+      req:   common.req,
+      warn:  common.warn,
+      hours: common.hours,
+      dress: common.dress
+    };
+  }
+
+  var topTitle = d.title + (posLabel ? ' – ' + posLabel : '');
+  document.getElementById('jd-top-title').textContent = topTitle;
+  document.getElementById('jd-confirm-btn').textContent = _(l === 'de' ? 'confirmRead' : 'confirmRead');
+
+  var tasksHtml  = d.tasks.map(function(t){ return '<li>'+t+'</li>'; }).join('');
+  var reqHtml    = d.req.map(function(r){ return '<li>'+r+'</li>'; }).join('');
+  var hoursHtml  = d.hours.map(function(h){ return '<li>'+h+'</li>'; }).join('');
+  var dressHtml  = d.dress.map(function(dr){ return '<li>'+dr+'</li>'; }).join('');
+
+  var tLabels = {
+    tasks: { de:'Deine Aufgaben', hr:'Tvoji zadaci' },
+    req:   { de:'Das solltest du mitbringen', hr:'Što trebaš donijeti' },
+    hours: { de:'Arbeitszeiten', hr:'Radno vrijeme' },
+    dress: { de:'Kleidung & Auftreten', hr:'Odjeća i izgled' }
+  };
+
+  document.getElementById('jd-content').innerHTML =
+    '<div class="jd-hero">'
+    +  '<div class="jd-hero-icon">'+d.icon+'</div>'
+    +  '<div class="jd-hero-title">'+(l==='de'?'Stelle im ':'Posao u ')+d.title+'</div>'
+    +  (posLabel ? '<div class="jd-hero-pos">'+posLabel+'</div>' : '')
+    +'</div>'
+    +'<div class="jd-section"><div class="jd-section-title">'+tLabels.tasks[l]+'</div><ul class="jd-list">'+tasksHtml+'</ul></div>'
+    +'<div class="jd-section"><div class="jd-section-title">'+tLabels.req[l]+'</div><ul class="jd-list">'+reqHtml+'</ul></div>'
+    +'<div class="jd-warn">⚠️ '+d.warn+'</div>'
+    +'<div class="jd-section"><div class="jd-section-title">'+tLabels.hours[l]+'</div><ul class="jd-list">'+hoursHtml+'</ul></div>'
+    +'<div class="jd-section"><div class="jd-section-title">'+tLabels.dress[l]+'</div><ul class="jd-list">'+dressHtml+'</ul></div>';
+
+  showScreen('job-desc-screen');
+}
+
+function confirmJobDesc() {
   updateFormAreaBadge();
   showScreen('form-screen');
   goToStep(1);
 }
+
+function goBackFromJobDesc() {
+  if (state.area === 'kitchen') {
+    showScreen('position-screen');
+  } else {
+    showScreen('area-screen');
+  }
+}
 function updateFormAreaBadge() {
   var badge = document.getElementById('form-area-badge');
-  if (badge && state.area) {
-    badge.textContent = _(state.area === 'kitchen' ? 'kitchen' : 'service');
+  if (!badge || !state.area) return;
+  var label = _(state.area === 'kitchen' ? 'kitchen' : 'service');
+  if (state.position && JD.kitchen[state.position]) {
+    label += ' – ' + JD.kitchen[state.position][state.lang].title;
   }
+  badge.textContent = label;
 }
 
 // ╔══════════════════════════════════════╗
@@ -1167,6 +1402,7 @@ function collectFormData() {
   var data = {
     lang: state.lang,
     area: state.area,
+    position: state.position || null,
     status: 'neu',
     timestamp: Date.now(),
     firstName: val('firstName'), lastName: val('lastName'),
@@ -1283,7 +1519,7 @@ var STORAGE_KEY = 'amfels_bew_v1';
 
 function saveProgress() {
   try {
-    var data = { lang: state.lang, area: state.area, step: state.step, fields: {}, checked: {} };
+    var data = { lang: state.lang, area: state.area, position: state.position, step: state.step, fields: {}, checked: {} };
     document.querySelectorAll('input[id], textarea[id], select[id]').forEach(function(el) {
       if (el.type !== 'file' && el.type !== 'checkbox' && el.type !== 'radio') {
         data.fields[el.id] = el.value;
@@ -1300,9 +1536,10 @@ function loadProgress() {
   try {
     var saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
     if (!saved || !saved.area) return false;
-    state.lang = saved.lang || 'de';
-    state.area = saved.area;
-    state.step = saved.step || 1;
+    state.lang     = saved.lang || 'de';
+    state.area     = saved.area;
+    state.position = saved.position || null;
+    state.step     = saved.step || 1;
     // Restore text fields
     if (saved.fields) {
       Object.keys(saved.fields).forEach(function(id) {

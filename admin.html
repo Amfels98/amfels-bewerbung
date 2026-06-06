@@ -335,6 +335,7 @@ function renderList() {
 
     var ts = app.timestamp ? new Date(app.timestamp).toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'numeric'}) : '';
     var st = app.status||'neu';
+    var posLabel = positionLabel(app);
 
     card.innerHTML = '<div class="app-card-inner">'
       + photoEl
@@ -344,6 +345,7 @@ function renderList() {
       + '</div>'
       + '<div class="app-right">'
       +   '<span class="badge area-'+app.area+'">'+(app.area==='kitchen'?'👨‍🍳 Küche':'🍷 Service')+'</span>'
+      +   (posLabel?'<span class="badge" style="background:#f0fdf4;color:#166534;font-size:11px">'+posLabel+'</span>':'')
       +   satBadge
       +   '<span class="badge status-'+st+'">'+cap(st)+'</span>'
       +   '<span class="app-date">'+ts+'</span>'
@@ -395,6 +397,8 @@ function openDetail(id) {
       +'<div class="d-text">'+esc(sv.stressAnswer||'–')+'</div></div>';
   }
 
+  var posLbl = positionLabel(app);
+
   var satMeta = '';
   if (app.area==='service'&&app.service) {
     var sm3={every:'sat-every',mostly:'sat-mostly',sometimes:'sat-sometimes',no:'sat-no'};
@@ -412,6 +416,7 @@ function openDetail(id) {
     +'<div class="d-name">'+esc(app.firstName||'')+' '+esc(app.lastName||'')+'</div>'
     +'<div class="d-meta-row">'
     +  '<span class="badge area-'+app.area+'">'+(app.area==='kitchen'?'👨‍🍳 Küche':'🍷 Service')+'</span>'
+    +  (posLbl?'<span class="badge" style="background:#f0fdf4;color:#166534">'+posLbl+'</span>':'')
     +  '<span class="badge status-'+(app.status||'neu')+'">'+cap(app.status||'neu')+'</span>'
     +  satMeta
     +'</div>'
@@ -486,6 +491,11 @@ function closeLightbox() {
 }
 document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeLightbox(); });
 
+var POS_LABELS = { pos1:'Salate/Spülen/Dessert', pos2:'Koch/Grill', pos3:'Koch/Pfannen/Fritteuse' };
+function positionLabel(app) {
+  if (app.area !== 'kitchen' || !app.position) return '';
+  return POS_LABELS[app.position] || '';
+}
 function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function cap(s){ return s?(s[0].toUpperCase()+s.slice(1)):s; }
 function dr(k,v){ return '<div class="d-row"><span class="dk">'+k+'</span><span class="dv">'+(v||'–')+'</span></div>'; }
