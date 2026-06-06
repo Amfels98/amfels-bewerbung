@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#4a3230">
+  <title>Am Fels – Admin Dashboard</title>
+  <style>
+    :root {
+      --brown:#4a3230; --brown-mid:#7a5c58; --brown-light:#a07060;
+      --cream:#f5efe8; --white:#fff; --text:#2d1f1e; --text-muted:#9e7b76;
+      --green:#2a7d4f; --red:#c0392b; --orange:#d97706;
+      --border:#e8ddd4; --shadow:0 1px 8px rgba(0,0,0,0.08);
+    }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--cream);color:var(--text);min-height:100vh;}
+
+    /* LOGIN */
+    #login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:var(--brown);padding:24px;}
+    .login-box{background:white;border-radius:20px;padding:32px 28px;width:100%;max-width:360px;text-align:center;}
+    .login-logo{width:80px;height:80px;border-radius:50%;overflow:hidden;margin:0 auto 16px;}
+    .login-logo img{width:100%;height:100%;object-fit:cover;}
+    .login-title{font-size:20px;font-weight:700;color:var(--brown);margin-bottom:4px;}
+    .login-sub{font-size:14px;color:var(--text-muted);margin-bottom:24px;}
+    .login-box input{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:16px;font-family:inherit;margin-bottom:12px;}
+    .login-box input:focus{outline:none;border-color:var(--brown-mid);}
+    .login-btn{width:100%;padding:14px;background:var(--brown);color:white;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;}
+    .login-err{color:var(--red);font-size:13px;margin-top:8px;display:none;}
+    .login-err.show{display:block;}
+
+    /* APP */
+    #app{display:none;}
+    #app.visible{display:flex;flex-direction:column;min-height:100vh;}
+
+    /* HEADER */
+    .header{background:var(--brown);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+    .header-left{display:flex;align-items:center;gap:10px;}
+    .header-logo{width:36px;height:36px;border-radius:50%;overflow:hidden;}
+    .header-logo img{width:100%;height:100%;object-fit:cover;}
+    .header-title{color:white;font-size:16px;font-weight:700;}
+    .header-sub{color:rgba(255,255,255,0.6);font-size:12px;}
+    .btn-sm{padding:6px 12px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none;font-family:inherit;}
+    .btn-logout{background:rgba(255,255,255,0.15);color:white;border:1px solid rgba(255,255,255,0.3);}
+    .btn-refresh{background:rgba(255,255,255,0.15);color:white;border:1px solid rgba(255,255,255,0.3);margin-right:6px;}
+
+    /* STATS */
+    .stats-bar{padding:12px 20px;display:flex;gap:12px;flex-wrap:wrap;}
+    .stat-card{background:white;border-radius:12px;padding:12px 16px;flex:1;min-width:80px;box-shadow:var(--shadow);text-align:center;}
+    .stat-num{font-size:26px;font-weight:800;color:var(--brown);}
+    .stat-label{font-size:12px;color:var(--text-muted);margin-top:2px;}
+
+    /* FILTERS */
+    .filters{background:white;border-bottom:1px solid var(--border);padding:12px 20px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+    .filter-pill{padding:6px 14px;border:1.5px solid var(--border);border-radius:20px;font-size:13px;font-weight:500;cursor:pointer;background:white;color:var(--text);transition:all 0.15s;}
+    .filter-pill.active{background:var(--brown);border-color:var(--brown);color:white;}
+    .search-wrap{flex:1;min-width:160px;}
+    .search-input{width:100%;padding:7px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:inherit;}
+    .search-input:focus{outline:none;border-color:var(--brown-mid);}
+
+    /* LIST */
+    .list-wrap{flex:1;padding:0 20px 20px;max-width:1100px;margin:0 auto;width:100%;}
+    .app-card{background:white;border-radius:14px;margin-bottom:10px;box-shadow:var(--shadow);overflow:hidden;cursor:pointer;transition:box-shadow 0.2s;border:2px solid transparent;}
+    .app-card:hover{box-shadow:0 4px 20px rgba(0,0,0,0.12);}
+    .app-card.selected{border-color:var(--brown);}
+    .app-card-inner{padding:14px 16px;display:flex;align-items:center;gap:14px;}
+    .app-photo{width:50px;height:50px;border-radius:50%;object-fit:cover;flex-shrink:0;background:var(--cream);}
+    .app-ph{width:50px;height:50px;border-radius:50%;background:var(--cream);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+    .app-info{flex:1;min-width:0;}
+    .app-name{font-size:16px;font-weight:700;}
+    .app-meta{font-size:13px;color:var(--text-muted);margin-top:2px;display:flex;gap:8px;flex-wrap:wrap;}
+    .app-right{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0;}
+    .badge{padding:3px 10px;border-radius:10px;font-size:12px;font-weight:600;}
+    .area-kitchen{background:#fef3c7;color:#92400e;}
+    .area-service{background:#dbeafe;color:#1e40af;}
+    .sat-every{background:#dcfce7;color:var(--green);}
+    .sat-mostly{background:#fef9c3;color:#854d0e;}
+    .sat-sometimes{background:#ffedd5;color:#9a3412;}
+    .sat-no{background:#fee2e2;color:var(--red);}
+    .status-neu{background:#e0e7ff;color:#3730a3;}
+    .status-interessant{background:#fef9c3;color:#854d0e;}
+    .status-eingeladen{background:#dcfce7;color:var(--green);}
+    .status-abgelehnt{background:#fee2e2;color:var(--red);}
+    .app-date{font-size:11px;color:var(--text-muted);}
+    .empty-state{text-align:center;padding:60px 20px;color:var(--text-muted);}
+    .empty-state .e-icon{font-size:48px;margin-bottom:12px;}
+
+    /* DETAIL PANEL */
+    #detail-panel{display:none;position:fixed;top:0;right:0;bottom:0;width:min(520px,100vw);background:white;box-shadow:-4px 0 24px rgba(0,0,0,0.15);z-index:200;overflow-y:auto;flex-direction:column;}
+    #detail-panel.open{display:flex;}
+    .d-header{background:var(--brown);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;}
+    .d-header h3{color:white;font-size:16px;}
+    .close-btn{background:rgba(255,255,255,0.15);border:none;color:white;width:32px;height:32px;border-radius:8px;font-size:18px;cursor:pointer;}
+    .d-body{padding:20px;flex:1;}
+    .d-photo{width:100px;height:100px;border-radius:50%;object-fit:cover;margin:0 auto 16px;display:block;border:3px solid var(--brown);}
+    .d-ph{width:100px;height:100px;border-radius:50%;background:var(--cream);display:flex;align-items:center;justify-content:center;font-size:48px;margin:0 auto 16px;}
+    .d-name{text-align:center;font-size:22px;font-weight:700;color:var(--brown);}
+    .d-meta-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:10px 0 20px;}
+    .d-section{margin-bottom:20px;}
+    .d-section-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--brown-light);margin-bottom:10px;border-bottom:1px solid var(--border);padding-bottom:6px;}
+    .d-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f5f5f5;font-size:14px;gap:12px;}
+    .d-row .dk{color:var(--text-muted);flex-shrink:0;}
+    .d-row .dv{font-weight:500;text-align:right;}
+    .d-text{background:var(--cream);border-radius:10px;padding:10px 12px;font-size:14px;line-height:1.6;margin-top:4px;}
+    .rbar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+    .rbar-label{font-size:13px;color:var(--text);width:155px;flex-shrink:0;}
+    .rbar{flex:1;height:8px;background:var(--border);border-radius:4px;overflow:hidden;}
+    .rbar-fill{height:100%;border-radius:4px;background:var(--brown);}
+    .rbar-num{font-size:13px;font-weight:700;color:var(--brown);width:18px;text-align:right;flex-shrink:0;}
+    .d-actions{padding:14px 16px;border-top:1px solid var(--border);background:white;position:sticky;bottom:0;display:flex;flex-wrap:wrap;gap:8px;}
+    .act-btn{flex:1;min-width:70px;padding:10px 4px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;}
+    .act-neu{background:#e0e7ff;color:#3730a3;}
+    .act-interessant{background:#fef9c3;color:#854d0e;}
+    .act-eingeladen{background:#dcfce7;color:var(--green);}
+    .act-abgelehnt{background:#fee2e2;color:var(--red);}
+    .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:190;}
+    .overlay.show{display:block;}
+
+    @media(max-width:600px){
+      .filters{padding:10px 12px;}
+      .stats-bar{padding:10px 12px;gap:8px;}
+      .list-wrap{padding:0 12px 20px;}
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo"><img src="logo.png" alt="Am Fels"></div>
+    <div class="login-title">Am Fels Admin</div>
+    <div class="login-sub">Bewerbungs-Dashboard</div>
+    <input type="password" id="login-pw" placeholder="Passwort" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="login-btn" onclick="doLogin()">Anmelden</button>
+    <div class="login-err" id="login-err">Falsches Passwort</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="header">
+    <div class="header-left">
+      <div class="header-logo"><img src="logo.png" alt="Am Fels"></div>
+      <div>
+        <div class="header-title">Am Fels – Bewerbungen</div>
+        <div class="header-sub" id="header-count">Lädt…</div>
+      </div>
+    </div>
+    <div>
+      <button class="btn-sm btn-refresh" onclick="loadApplications()">↻ Aktualisieren</button>
+      <button class="btn-sm btn-logout" onclick="doLogout()">Abmelden</button>
+    </div>
+  </div>
+
+  <div class="stats-bar" id="stats-bar">
+    <div class="stat-card"><div class="stat-num" id="s-total">–</div><div class="stat-label">Gesamt</div></div>
+    <div class="stat-card"><div class="stat-num" id="s-neu">–</div><div class="stat-label">Neu</div></div>
+    <div class="stat-card"><div class="stat-num" id="s-int">–</div><div class="stat-label">Interessant</div></div>
+    <div class="stat-card"><div class="stat-num" id="s-k">–</div><div class="stat-label">Küche</div></div>
+    <div class="stat-card"><div class="stat-num" id="s-s">–</div><div class="stat-label">Service</div></div>
+  </div>
+
+  <div class="filters">
+    <button class="filter-pill active" onclick="setFilter(this,'all')">Alle</button>
+    <button class="filter-pill" onclick="setFilter(this,'kitchen')">👨‍🍳 Küche</button>
+    <button class="filter-pill" onclick="setFilter(this,'service')">🍷 Service</button>
+    <button class="filter-pill" onclick="setFilter(this,'neu')">Neu</button>
+    <button class="filter-pill" onclick="setFilter(this,'interessant')">Interessant</button>
+    <button class="filter-pill" onclick="setFilter(this,'eingeladen')">Eingeladen</button>
+    <button class="filter-pill" onclick="setFilter(this,'abgelehnt')">Abgelehnt</button>
+    <button class="filter-pill" onclick="setFilter(this,'sat-no')">🔴 Kein Sa</button>
+    <div class="search-wrap">
+      <input class="search-input" type="search" placeholder="Namen suchen…" oninput="renderList()">
+    </div>
+  </div>
+
+  <div class="list-wrap" id="list-wrap">
+    <div class="empty-state" id="empty-state" style="display:none;">
+      <div class="e-icon">📭</div><div>Keine Bewerbungen gefunden</div>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="overlay" onclick="closeDetail()"></div>
+<div id="detail-panel">
+  <div class="d-header">
+    <h3 id="d-title">Bewerbung</h3>
+    <button class="close-btn" onclick="closeDetail()">✕</button>
+  </div>
+  <div class="d-body" id="d-body"></div>
+  <div class="d-actions">
+    <button class="act-btn act-neu"         onclick="setStatus('neu')">Neu</button>
+    <button class="act-btn act-interessant" onclick="setStatus('interessant')">Interessant</button>
+    <button class="act-btn act-eingeladen"  onclick="setStatus('eingeladen')">Eingeladen</button>
+    <button class="act-btn act-abgelehnt"   onclick="setStatus('abgelehnt')">Abgelehnt</button>
+  </div>
+</div>
+
+<script>
+var DB = 'https://apfels-team-default-rtdb.europe-west1.firebasedatabase.app/bewerbungen';
+var ADMIN_PW = 'amfels2026';
+var allApps = [], currentFilter = 'all', currentId = null;
+
+// ── AUTH ──
+function doLogin() {
+  if (document.getElementById('login-pw').value === ADMIN_PW) {
+    localStorage.setItem('amfels_admin', '1');
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').classList.add('visible');
+    loadApplications();
+  } else {
+    document.getElementById('login-err').classList.add('show');
+  }
+}
+function doLogout() {
+  localStorage.removeItem('amfels_admin');
+  location.reload();
+}
+if (localStorage.getItem('amfels_admin')) {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app').classList.add('visible');
+  loadApplications();
+}
+
+// Push-Benachrichtigung bei neuen Bewerbungen
+function checkForNewApps(apps) {
+  var lastSeen = parseInt(localStorage.getItem('amfels_last_seen') || '0');
+  var newOnes  = apps.filter(function(a) { return (a.timestamp||0) > lastSeen; });
+  localStorage.setItem('amfels_last_seen', Date.now().toString());
+  if (newOnes.length > 0 && lastSeen > 0 && 'Notification' in window) {
+    Notification.requestPermission().then(function(p) {
+      if (p === 'granted') {
+        new Notification('🆕 ' + newOnes.length + ' neue Bewerbung' + (newOnes.length > 1 ? 'en' : '') + ' – Am Fels', {
+          body: newOnes.map(function(a){ return (a.firstName||'') + ' ' + (a.lastName||'') + ' (' + (a.area==='kitchen'?'Küche':'Service') + ')'; }).join('\n'),
+          icon: 'logo.png'
+        });
+      }
+    });
+  }
+}
+
+// ── LOAD ──
+function loadApplications() {
+  document.getElementById('header-count').textContent = 'Lädt…';
+  fetch(DB + '.json')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      allApps = [];
+      if (data && typeof data === 'object') {
+        Object.keys(data).forEach(function(id) {
+          if (data[id]) allApps.push(Object.assign({ _id: id }, data[id]));
+        });
+        allApps.sort(function(a,b) { return (b.timestamp||0) - (a.timestamp||0); });
+      }
+      checkForNewApps(allApps);
+      updateStats();
+      renderList();
+    })
+    .catch(function(e) {
+      document.getElementById('header-count').textContent = 'Fehler beim Laden';
+    });
+}
+
+function updateStats() {
+  var neu = allApps.filter(function(a){ return a.status==='neu'||!a.status; }).length;
+  var int = allApps.filter(function(a){ return a.status==='interessant'; }).length;
+  var k   = allApps.filter(function(a){ return a.area==='kitchen'; }).length;
+  var s   = allApps.filter(function(a){ return a.area==='service'; }).length;
+  document.getElementById('s-total').textContent = allApps.length;
+  document.getElementById('s-neu').textContent   = neu;
+  document.getElementById('s-int').textContent   = int;
+  document.getElementById('s-k').textContent     = k;
+  document.getElementById('s-s').textContent     = s;
+  document.getElementById('header-count').textContent = allApps.length + ' Bewerbung' + (allApps.length!==1?'en':'');
+}
+
+// ── FILTER ──
+function setFilter(btn, f) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-pill').forEach(function(p){ p.classList.remove('active'); });
+  btn.classList.add('active');
+  renderList();
+}
+function getFiltered() {
+  var q = (document.querySelector('.search-input')||{}).value || '';
+  return allApps.filter(function(a) {
+    var f = currentFilter;
+    if (f==='kitchen'    && a.area!=='kitchen') return false;
+    if (f==='service'    && a.area!=='service') return false;
+    if (f==='neu'        && a.status&&a.status!=='neu') return false;
+    if (f==='interessant'&& a.status!=='interessant') return false;
+    if (f==='eingeladen' && a.status!=='eingeladen') return false;
+    if (f==='abgelehnt'  && a.status!=='abgelehnt') return false;
+    if (f==='sat-no'     && !(a.service&&a.service.saturday==='no')) return false;
+    if (q) {
+      var n = ((a.firstName||'')+(a.lastName||'')).toLowerCase();
+      if (!n.includes(q.toLowerCase())) return false;
+    }
+    return true;
+  });
+}
+
+// ── RENDER LIST ──
+function renderList() {
+  var apps  = getFiltered();
+  var wrap  = document.getElementById('list-wrap');
+  var empty = document.getElementById('empty-state');
+  Array.from(wrap.querySelectorAll('.app-card')).forEach(function(c){ c.remove(); });
+  if (!apps.length) { empty.style.display=''; return; }
+  empty.style.display = 'none';
+
+  apps.forEach(function(app) {
+    var card = document.createElement('div');
+    card.className = 'app-card' + (app._id===currentId?' selected':'');
+    card.onclick = function(){ openDetail(app._id); };
+
+    var photoEl = app.photoBase64
+      ? '<img class="app-photo" src="'+app.photoBase64+'" onerror="this.style.display=\'none\'">'
+      : '<div class="app-ph">👤</div>';
+
+    var satBadge = '';
+    if (app.area==='service'&&app.service) {
+      var sm={every:'sat-every',mostly:'sat-mostly',sometimes:'sat-sometimes',no:'sat-no'};
+      var sl={every:'✅ Sa immer',mostly:'🟡 Sa meist',sometimes:'🟠 Sa selten',no:'🔴 Sa nie'};
+      var sv=app.service.saturday||'';
+      if(sl[sv]) satBadge='<span class="badge '+sm[sv]+'">'+sl[sv]+'</span>';
+    }
+
+    var ts = app.timestamp ? new Date(app.timestamp).toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'numeric'}) : '';
+    var st = app.status||'neu';
+
+    card.innerHTML = '<div class="app-card-inner">'
+      + photoEl
+      + '<div class="app-info">'
+      +   '<div class="app-name">'+esc(app.firstName||'')+' '+esc(app.lastName||'')+'</div>'
+      +   '<div class="app-meta"><span>'+esc(app.city||'')+'</span><span>'+esc(app.phone||'')+'</span></div>'
+      + '</div>'
+      + '<div class="app-right">'
+      +   '<span class="badge area-'+app.area+'">'+(app.area==='kitchen'?'👨‍🍳 Küche':'🍷 Service')+'</span>'
+      +   satBadge
+      +   '<span class="badge status-'+st+'">'+cap(st)+'</span>'
+      +   '<span class="app-date">'+ts+'</span>'
+      + '</div></div>';
+
+    wrap.appendChild(card);
+  });
+}
+
+// ── DETAIL ──
+function openDetail(id) {
+  currentId = id;
+  var app = allApps.find(function(a){ return a._id===id; });
+  if (!app) return;
+  renderList();
+  document.getElementById('d-title').textContent = (app.firstName||'') + ' ' + (app.lastName||'');
+
+  var sa = app.selfAssessment || {};
+  var ratings = [
+    ['Zuverlässigkeit',sa.reliability],['Teamfähigkeit',sa.teamwork],
+    ['Stressresistenz',sa.stressResistance],['Körp. Belastbarkeit',sa.physicalFitness],
+    ['Eigeninitiative',sa.initiative],['Sauberkeit',sa.cleanliness],['Umgang Kritik',sa.feedbackHandling]
+  ].map(function(r){
+    var v=r[1]||0;
+    return '<div class="rbar-row"><span class="rbar-label">'+r[0]+'</span>'
+      +'<div class="rbar"><div class="rbar-fill" style="width:'+(v*20)+'%"></div></div>'
+      +'<span class="rbar-num">'+(v||'–')+'</span></div>';
+  }).join('');
+
+  var areaBlock = '';
+  if (app.area==='kitchen'&&app.kitchen) {
+    var k=app.kitchen;
+    areaBlock='<div class="d-section"><div class="d-section-title">Küche</div>'
+      +dr('Posten',(k.stations||[]).join(', ')||'–')
+      +dr('HACCP',(k.haccpLevel||'–')+'/5')
+      +dr('Arbeitstempo',(k.speedLevel||'–')+'/5')
+      +'<div style="font-size:13px;font-weight:600;color:var(--brown-light);margin:8px 0 4px">Stress-Antwort</div>'
+      +'<div class="d-text">'+esc(k.stressAnswer||'–')+'</div></div>';
+  } else if (app.area==='service'&&app.service) {
+    var sv=app.service;
+    var sm2={every:'✅ Immer',mostly:'🟡 Meistens',sometimes:'🟠 Gelegentl.',no:'🔴 Nie'};
+    areaBlock='<div class="d-section"><div class="d-section-title">Service</div>'
+      +dr('Samstag',sm2[sv.saturday]||'–')
+      +dr('Kasse',sv.cashRegister==='yes'?'✅ Ja'+(sv.cashRegisterSystem?' – '+sv.cashRegisterSystem:''):'Nein')
+      +dr('Wein',(sv.wineLevel||'–')+'/5')
+      +dr('Upselling',(sv.upsellingLevel||'–')+'/5')
+      +dr('Beschwerdemgmt',(sv.complaintLevel||'–')+'/5')
+      +'<div style="font-size:13px;font-weight:600;color:var(--brown-light);margin:8px 0 4px">Beschwerde-Antwort</div>'
+      +'<div class="d-text">'+esc(sv.stressAnswer||'–')+'</div></div>';
+  }
+
+  var satMeta = '';
+  if (app.area==='service'&&app.service) {
+    var sm3={every:'sat-every',mostly:'sat-mostly',sometimes:'sat-sometimes',no:'sat-no'};
+    var sl3={every:'✅ Sa immer',mostly:'🟡 Sa meistens',sometimes:'🟠 Sa gelegentl.',no:'🔴 Sa nie'};
+    var sv3=app.service.saturday||'';
+    if(sl3[sv3]) satMeta='<span class="badge '+sm3[sv3]+'" style="padding:5px 14px">'+sl3[sv3]+'</span>';
+  }
+
+  var ts = app.timestamp ? new Date(app.timestamp).toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}) : '';
+
+  document.getElementById('d-body').innerHTML =
+    (app.photoBase64
+      ? '<img class="d-photo" src="'+app.photoBase64+'">'
+      : '<div class="d-ph">👤</div>')
+    +'<div class="d-name">'+esc(app.firstName||'')+' '+esc(app.lastName||'')+'</div>'
+    +'<div class="d-meta-row">'
+    +  '<span class="badge area-'+app.area+'">'+(app.area==='kitchen'?'👨‍🍳 Küche':'🍷 Service')+'</span>'
+    +  '<span class="badge status-'+(app.status||'neu')+'">'+cap(app.status||'neu')+'</span>'
+    +  satMeta
+    +'</div>'
+    +'<div class="d-section"><div class="d-section-title">Persönliches</div>'
+    +dr('Geburtsdatum',app.birthDate||'–')
+    +dr('Wohnort',(app.zip||'')+' '+(app.city||''))
+    +dr('Telefon','<a href="tel:'+esc(app.phone||'')+'">'+esc(app.phone||'–')+'</a>')
+    +dr('E-Mail','<a href="mailto:'+esc(app.email||'')+'">'+esc(app.email||'–')+'</a>')
+    +dr('Mobilität',(app.commute||[]).join(', ')||'–')
+    +dr('Führerschein',app.driverLicense==='yes'?'Ja':'Nein')
+    +dr('Arbeitserlaubnis',{yes:'✅ Ja',no:'❌ Nein',pending:'⏳ In Klärung'}[app.workPermit]||'–')
+    +(app.workPermitNote?dr('Erlaubnis-Notiz',app.workPermitNote):'')
+    +dr('Sprachen',app.languages||'–')
+    +'</div>'
+    +'<div class="d-section"><div class="d-section-title">Verfügbarkeit</div>'
+    +dr('Eintritt',app.startDate||'–')
+    +dr('Umfang',cap(app.workType||'–'))
+    +dr('Tage',(app.availability||[]).join(', ')||'–')
+    +'</div>'
+    +'<div class="d-section"><div class="d-section-title">Werdegang</div>'
+    +dr('Letzte Stelle',app.currentJob||'–')
+    +dr('Jahre Erfahrung',app.experienceYears||'–')
+    +dr('Ausbildung',app.education||'–')
+    +(app.experienceText?'<div style="font-size:13px;font-weight:600;color:var(--brown-light);margin:8px 0 4px">Erfahrung</div><div class="d-text">'+esc(app.experienceText)+'</div>':'')
+    +'</div>'
+    + areaBlock
+    +'<div class="d-section"><div class="d-section-title">Selbsteinschätzung</div>'+ratings+'</div>'
+    +'<div class="d-section"><div class="d-section-title">Motivation</div>'
+    +qa('Warum bei uns?',app.whyUs)
+    +qa('Motivation Gastronomie',app.whyGastro)
+    +qa('Reaktion auf Kritik',app.handleCritique)
+    +qa('Erwartungen',app.expectations)
+    +qa('Größte Herausforderung',app.bigChallenge)
+    +'</div>'
+    +'<div style="text-align:center;color:var(--text-muted);font-size:12px;margin-top:12px">Eingegangen: '+ts+'</div>';
+
+  document.getElementById('detail-panel').classList.add('open');
+  document.getElementById('overlay').classList.add('show');
+}
+
+function closeDetail() {
+  currentId = null;
+  document.getElementById('detail-panel').classList.remove('open');
+  document.getElementById('overlay').classList.remove('show');
+  document.querySelectorAll('.app-card').forEach(function(c){ c.classList.remove('selected'); });
+}
+
+// ── STATUS ──
+function setStatus(status) {
+  if (!currentId) return;
+  fetch(DB + '/' + currentId + '.json', {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ status: status })
+  }).then(function() {
+    var app = allApps.find(function(a){ return a._id===currentId; });
+    if (app) app.status = status;
+    renderList();
+    openDetail(currentId);
+  });
+}
+
+// ── HELPERS ──
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function cap(s){ return s?(s[0].toUpperCase()+s.slice(1)):s; }
+function dr(k,v){ return '<div class="d-row"><span class="dk">'+k+'</span><span class="dv">'+(v||'–')+'</span></div>'; }
+function qa(q,a){
+  if(!a) return '';
+  return '<div style="margin-bottom:12px"><div style="font-size:13px;font-weight:600;color:var(--brown-light);margin-bottom:4px">'+q+'</div><div class="d-text">'+esc(a)+'</div></div>';
+}
+</script>
+</body>
+</html>

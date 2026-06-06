@@ -1,0 +1,14 @@
+{
+  "name": "Am Fels – Bewerbung",
+  "short_name": "Am Fels Jobs",
+  "description": "Bewerbungsformular Restaurant Am Fels",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#4a3230",
+  "theme_color": "#4a3230",
+  "icons": [
+    { "src": "logo.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "logo.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

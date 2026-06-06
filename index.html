@@ -1,0 +1,1372 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#4a3230">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Restaurant Am Fels – Bewerbung / Prijava</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="logo.png">
+  <style>
+    :root {
+      --brown: #4a3230;
+      --brown-mid: #7a5c58;
+      --brown-light: #a07060;
+      --cream: #f5efe8;
+      --cream-dark: #e8ddd4;
+      --white: #ffffff;
+      --text: #2d1f1e;
+      --text-muted: #9e7b76;
+      --green: #2a7d4f;
+      --red: #c0392b;
+      --orange: #d97706;
+      --border: #e8ddd4;
+      --shadow: 0 1px 8px rgba(0,0,0,0.08);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--cream); color: var(--text); min-height: 100vh; font-size: 16px; line-height: 1.5; }
+
+    /* ── SCREENS ── */
+    .screen { display: none; }
+    .screen.active { display: flex; flex-direction: column; min-height: 100vh; }
+
+    /* ── LANGUAGE SCREEN ── */
+    #lang-screen { background: var(--brown); align-items: center; justify-content: center; text-align: center; padding: 48px 24px; gap: 28px; }
+    .lang-logo { width: 110px; height: 110px; border-radius: 50%; overflow: hidden; }
+    .lang-logo img { width: 100%; height: 100%; object-fit: cover; }
+    #lang-screen h1 { color: white; font-size: 28px; font-weight: 700; }
+    #lang-screen .subtitle { color: rgba(255,255,255,0.6); font-size: 14px; letter-spacing: 0.05em; text-transform: uppercase; }
+    #lang-screen .prompt { color: rgba(255,255,255,0.75); font-size: 16px; }
+    .lang-buttons { display: flex; flex-direction: column; gap: 14px; width: 100%; max-width: 300px; }
+    .lang-btn { background: rgba(255,255,255,0.12); border: 1.5px solid rgba(255,255,255,0.3); border-radius: 14px; padding: 18px; color: white; font-size: 18px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 12px; transition: background 0.2s; }
+    .lang-btn:active { background: rgba(255,255,255,0.22); }
+    .continue-box { background: rgba(255,255,255,0.1); border: 1.5px solid rgba(255,255,255,0.3); border-radius: 16px; padding: 18px 20px; width: 100%; max-width: 300px; text-align: center; }
+    .continue-box p { color: rgba(255,255,255,0.8); font-size: 14px; margin-bottom: 12px; }
+    .continue-box strong { color: white; }
+    .btn-continue { width: 100%; padding: 13px; background: white; color: var(--brown); border: none; border-radius: 10px; font-size: 16px; font-weight: 700; cursor: pointer; font-family: inherit; margin-bottom: 8px; }
+    .btn-fresh { width: 100%; padding: 10px; background: transparent; color: rgba(255,255,255,0.55); border: 1px solid rgba(255,255,255,0.2); border-radius: 10px; font-size: 14px; cursor: pointer; font-family: inherit; }
+
+    /* ── TOP BAR ── */
+    .top-bar { background: var(--brown); padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+    .top-bar-left { display: flex; align-items: center; gap: 10px; }
+    .top-bar-logo { width: 38px; height: 38px; border-radius: 50%; overflow: hidden; }
+    .top-bar-logo img { width: 100%; height: 100%; object-fit: cover; }
+    .top-bar-title { color: white; font-size: 15px; font-weight: 600; }
+    .top-bar-sub { color: rgba(255,255,255,0.6); font-size: 12px; }
+    .lang-toggle-btn { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-radius: 8px; padding: 6px 12px; color: white; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+
+    /* ── AREA SCREEN ── */
+    #area-screen { background: var(--cream); }
+    .area-content { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 24px; gap: 32px; text-align: center; }
+    .area-content h2 { font-size: 24px; font-weight: 700; color: var(--brown); }
+    .area-content p { color: var(--text-muted); font-size: 15px; }
+    .area-buttons { display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 340px; }
+    .area-btn { background: var(--brown); border: none; border-radius: 18px; padding: 22px 20px; color: white; cursor: pointer; display: flex; align-items: center; gap: 18px; box-shadow: 0 4px 18px rgba(74,50,48,0.28); transition: transform 0.15s; width: 100%; text-align: left; }
+    .area-btn:active { transform: scale(0.97); }
+    .area-icon { font-size: 40px; flex-shrink: 0; }
+    .area-title { font-size: 20px; font-weight: 700; display: block; }
+    .area-sub { font-size: 13px; font-weight: 400; opacity: 0.7; display: block; margin-top: 2px; }
+
+    /* ── FORM SCREEN ── */
+    #form-screen { background: var(--cream); }
+    .progress-wrap { background: var(--brown); padding: 10px 16px 14px; }
+    .progress-steps { display: flex; justify-content: center; gap: 6px; margin-top: 8px; }
+    .prog-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.2); transition: all 0.3s; flex-shrink: 0; }
+    .prog-dot.done { background: rgba(255,255,255,0.55); }
+    .prog-dot.active { background: white; width: 28px; border-radius: 5px; }
+    .progress-label { color: rgba(255,255,255,0.55); font-size: 12px; text-align: center; margin-top: 6px; }
+
+    .step-content { padding: 20px 16px 110px; max-width: 600px; margin: 0 auto; width: 100%; }
+    .step { display: none; }
+    .step.active { display: block; }
+    .step-title { font-size: 22px; font-weight: 700; color: var(--brown); margin-bottom: 6px; }
+    .step-desc { font-size: 14px; color: var(--text-muted); margin-bottom: 20px; }
+
+    /* ── CARDS ── */
+    .card { background: white; border-radius: 16px; padding: 18px; margin-bottom: 14px; box-shadow: var(--shadow); }
+    .card-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--brown-light); margin-bottom: 14px; }
+
+    /* ── FORM FIELDS ── */
+    .form-group { margin-bottom: 14px; }
+    .form-group:last-child { margin-bottom: 0; }
+    label { display: block; font-size: 14px; font-weight: 600; color: var(--brown); margin-bottom: 5px; }
+    label .req { color: var(--red); }
+    input[type="text"], input[type="email"], input[type="tel"], input[type="date"], input[type="number"], textarea, select {
+      width: 100%; padding: 12px 14px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 16px; font-family: inherit; background: white; color: var(--text); transition: border-color 0.2s; -webkit-appearance: none; appearance: none;
+    }
+    input:focus, textarea:focus, select:focus { outline: none; border-color: var(--brown-mid); box-shadow: 0 0 0 3px rgba(122,92,88,0.1); }
+    input.error, textarea.error, select.error { border-color: var(--red); }
+    textarea { resize: vertical; min-height: 90px; }
+    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .error-msg { color: var(--red); font-size: 12px; margin-top: 4px; display: none; }
+    .error-msg.show { display: block; }
+
+    /* ── PILLS (checkboxes/radios) ── */
+    .pill-group { display: flex; flex-wrap: wrap; gap: 8px; }
+    .pill-label { display: inline-flex; align-items: center; padding: 8px 14px; border: 1.5px solid var(--border); border-radius: 20px; cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.15s; background: white; color: var(--text); user-select: none; }
+    .pill-label input { display: none; }
+    .pill-label.selected { background: var(--brown); border-color: var(--brown); color: white; }
+
+    /* ── RATING 1–5 ── */
+    .rating-wrap { display: flex; flex-direction: column; gap: 12px; }
+    .rating-row { display: flex; align-items: center; gap: 10px; }
+    .rating-label { font-size: 14px; font-weight: 600; color: var(--brown); flex: 1; min-width: 0; }
+    .rating-btns { display: flex; gap: 5px; flex-shrink: 0; }
+    .r-btn { width: 36px; height: 36px; border: 1.5px solid var(--border); border-radius: 8px; background: white; font-size: 14px; font-weight: 700; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+    .r-btn.selected { background: var(--brown); border-color: var(--brown); color: white; }
+
+    /* ── PHOTO UPLOAD ── */
+    .photo-area { border: 2px dashed var(--border); border-radius: 16px; padding: 30px 16px; text-align: center; cursor: pointer; background: white; transition: all 0.2s; }
+    .photo-area.has-photo { border-style: solid; border-color: var(--brown); }
+    .photo-area:hover { border-color: var(--brown-mid); }
+    .photo-preview { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; margin: 0 auto 12px; display: block; border: 3px solid var(--brown); }
+    .photo-placeholder { font-size: 48px; margin-bottom: 10px; }
+    .photo-hint { color: var(--text-muted); font-size: 14px; }
+    .photo-change { margin-top: 8px; font-size: 13px; color: var(--brown-mid); font-weight: 600; }
+
+    /* ── FILE UPLOAD ── */
+    .file-btn { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border: 1.5px dashed var(--border); border-radius: 10px; background: white; cursor: pointer; font-size: 14px; color: var(--text-muted); width: 100%; }
+    .file-btn.has-file { border-color: var(--brown); border-style: solid; color: var(--brown); font-weight: 600; }
+
+    /* ── DSGVO ── */
+    .dsgvo-box { background: #fff8f0; border: 1.5px solid #f0d9c5; border-radius: 12px; padding: 16px; }
+    .dsgvo-check { display: flex; align-items: flex-start; gap: 12px; }
+    .dsgvo-check input[type="checkbox"] { width: 20px; height: 20px; flex-shrink: 0; cursor: pointer; accent-color: var(--brown); margin-top: 1px; }
+    .dsgvo-check label { font-size: 13px; font-weight: 400; color: var(--text); margin: 0; }
+    .dsgvo-check label a { color: var(--brown); }
+
+    /* ── NAV BAR ── */
+    .nav-bar { position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top: 1px solid var(--border); padding: 10px 16px; display: flex; gap: 10px; z-index: 100; max-width: 600px; margin: 0 auto; }
+    .btn-back { flex: 1; padding: 14px; border: 1.5px solid var(--border); border-radius: 12px; background: white; color: var(--brown); font-size: 16px; font-weight: 600; cursor: pointer; font-family: inherit; }
+    .btn-next, .btn-submit { flex: 2; padding: 14px; border: none; border-radius: 12px; background: var(--brown); color: white; font-size: 16px; font-weight: 700; cursor: pointer; font-family: inherit; transition: opacity 0.2s; }
+    .btn-next:disabled, .btn-submit:disabled { opacity: 0.5; cursor: default; }
+    .btn-submit { background: var(--green); }
+    .nav-bar-full { display: none; }
+
+    /* ── SUCCESS SCREEN ── */
+    #success-screen { background: var(--brown); align-items: center; justify-content: center; text-align: center; padding: 48px 24px; gap: 20px; }
+    .success-icon { font-size: 72px; }
+    #success-screen h2 { color: white; font-size: 28px; font-weight: 700; }
+    #success-screen p { color: rgba(255,255,255,0.75); font-size: 16px; max-width: 300px; line-height: 1.6; }
+
+    /* ── ERROR TOAST ── */
+    .toast { position: fixed; top: 12px; left: 50%; transform: translateX(-50%); background: var(--red); color: white; padding: 12px 20px; border-radius: 12px; font-size: 14px; font-weight: 600; z-index: 9999; box-shadow: 0 4px 16px rgba(0,0,0,0.2); max-width: 90vw; text-align: center; display: none; }
+    .toast.show { display: block; animation: fadeInDown 0.25s ease; }
+    @keyframes fadeInDown { from { opacity:0; transform: translateX(-50%) translateY(-10px); } to { opacity:1; transform: translateX(-50%) translateY(0); } }
+
+    /* ── LOADING ── */
+    .loading-overlay { position: fixed; inset: 0; background: rgba(74,50,48,0.85); display: none; align-items: center; justify-content: center; flex-direction: column; gap: 16px; z-index: 999; }
+    .loading-overlay.show { display: flex; }
+    .spinner { width: 48px; height: 48px; border: 4px solid rgba(255,255,255,0.2); border-top-color: white; border-radius: 50%; animation: spin 0.8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-text { color: white; font-size: 16px; }
+
+    /* ── SATURDAY HIGHLIGHT ── */
+    .saturday-important { background: #fff3cd; border: 1.5px solid #ffc107; border-radius: 12px; padding: 12px 14px; margin-bottom: 14px; display: flex; gap: 10px; align-items: flex-start; font-size: 14px; color: #856404; font-weight: 500; }
+
+    /* ── SCHEDULE INFO BOX ── */
+    .schedule-info { background: #e8f4fd; border: 1.5px solid #bee3f8; border-radius: 12px; padding: 14px 16px; margin-top: 10px; }
+    .schedule-info .s-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #2c5282; margin-bottom: 10px; }
+    .schedule-info .s-row { display: flex; align-items: flex-start; gap: 8px; font-size: 14px; color: #2d3748; margin-bottom: 6px; line-height: 1.4; }
+    .schedule-info .s-row:last-child { margin-bottom: 0; }
+    .schedule-info .s-icon { flex-shrink: 0; }
+
+    /* ── HINT TEXT ── */
+    .hint { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+    @media (min-width: 600px) {
+      .step-content { padding: 28px 28px 110px; }
+      .nav-bar { left: 50%; transform: translateX(-50%); width: 600px; right: auto; border-radius: 16px 16px 0 0; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     SCREEN 0 – LANGUAGE
+══════════════════════════════════════ -->
+<div id="lang-screen" class="screen active">
+  <div class="lang-logo"><img src="logo.png" alt="Am Fels"></div>
+  <h1>Restaurant Am Fels</h1>
+  <p class="subtitle">amfels.de</p>
+  <p class="prompt" id="lang-prompt">Bitte wähle deine Sprache</p>
+  <div class="lang-buttons">
+    <button class="lang-btn" onclick="setLang('de')">🇩🇪 &nbsp; Deutsch</button>
+    <button class="lang-btn" onclick="setLang('hr')">🇭🇷 &nbsp; Hrvatski</button>
+  </div>
+
+  <!-- Continue banner – shown when saved data exists -->
+  <div id="continue-banner" style="display:none;">
+    <div class="continue-box">
+      <p id="continue-text">Du hast eine <strong>angefangene Bewerbung</strong> – möchtest du weitermachen?</p>
+      <button class="btn-continue" onclick="continueApplication()">➜ &nbsp; Weiter machen</button>
+      <button class="btn-fresh" onclick="startFresh()">Neu starten</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SCREEN 1 – AREA SELECTION
+══════════════════════════════════════ -->
+<div id="area-screen" class="screen">
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <div class="top-bar-logo"><img src="logo.png" alt="Am Fels"></div>
+      <div>
+        <div class="top-bar-title">Restaurant Am Fels</div>
+        <div class="top-bar-sub" data-i18n="bewerbung">Bewerbung</div>
+      </div>
+    </div>
+    <button class="lang-toggle-btn" onclick="toggleLang()">DE / HR</button>
+  </div>
+  <div class="area-content">
+    <div>
+      <h2 data-i18n="areaTitle">Für welchen Bereich bewirbst du dich?</h2>
+      <p data-i18n="areaDesc">Wähle deinen gewünschten Arbeitsbereich</p>
+    </div>
+    <div class="area-buttons">
+      <button class="area-btn" onclick="setArea('kitchen')">
+        <span class="area-icon">👨‍🍳</span>
+        <span>
+          <span class="area-title" data-i18n="kitchen">Küche</span>
+          <span class="area-sub" data-i18n="kitchenSub">Koch, Küchenhilfe, Spülküche</span>
+        </span>
+      </button>
+      <button class="area-btn" onclick="setArea('service')">
+        <span class="area-icon">🍷</span>
+        <span>
+          <span class="area-title" data-i18n="service">Service</span>
+          <span class="area-sub" data-i18n="serviceSub">Kellner/in, Servicekraft</span>
+        </span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SCREEN 2 – FORM
+══════════════════════════════════════ -->
+<div id="form-screen" class="screen">
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <div class="top-bar-logo"><img src="logo.png" alt="Am Fels"></div>
+      <div>
+        <div class="top-bar-title" id="form-area-badge">Küche</div>
+        <div class="top-bar-sub" data-i18n="bewerbung">Bewerbung</div>
+      </div>
+    </div>
+    <button class="lang-toggle-btn" onclick="toggleLang()">DE / HR</button>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-steps" id="prog-steps"></div>
+    <div class="progress-label" id="prog-label">Schritt 1 von 6</div>
+  </div>
+
+  <div class="step-content">
+
+    <!-- ── STEP 1: PERSONAL ── -->
+    <div class="step active" data-step="1">
+      <div class="step-title" data-i18n="step1Title">Persönliche Daten</div>
+      <div class="step-desc" data-i18n="step1Desc">Deine Kontaktinformationen</div>
+
+      <div class="card">
+        <div class="row-2">
+          <div class="form-group">
+            <label><span data-i18n="firstName">Vorname</span> <span class="req">*</span></label>
+            <input type="text" id="firstName" autocomplete="given-name" inputmode="text">
+            <div class="error-msg" id="err-firstName" data-i18n="errRequired">Pflichtfeld</div>
+          </div>
+          <div class="form-group">
+            <label><span data-i18n="lastName">Nachname</span> <span class="req">*</span></label>
+            <input type="text" id="lastName" autocomplete="family-name">
+            <div class="error-msg" id="err-lastName" data-i18n="errRequired">Pflichtfeld</div>
+          </div>
+        </div>
+        <div class="row-2">
+          <div class="form-group">
+            <label><span data-i18n="birthDate">Geburtsdatum</span> <span class="req">*</span></label>
+            <input type="date" id="birthDate">
+            <div class="error-msg" id="err-birthDate" data-i18n="errRequired">Pflichtfeld</div>
+          </div>
+          <div class="form-group">
+            <label data-i18n="zip">PLZ</label>
+            <input type="text" id="zip" inputmode="numeric" maxlength="10">
+          </div>
+        </div>
+        <div class="form-group">
+          <label data-i18n="city">Wohnort</label>
+          <input type="text" id="city" autocomplete="address-level2">
+        </div>
+        <div class="form-group">
+          <label><span data-i18n="phone">Telefon</span> <span class="req">*</span></label>
+          <input type="tel" id="phone" inputmode="tel" autocomplete="tel">
+          <div class="error-msg" id="err-phone" data-i18n="errRequired">Pflichtfeld</div>
+        </div>
+        <div class="form-group">
+          <label><span data-i18n="email">E-Mail</span> <span class="req">*</span></label>
+          <input type="email" id="email" inputmode="email" autocomplete="email">
+          <div class="error-msg" id="err-email" data-i18n="errEmail">Bitte gültige E-Mail eingeben</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title" data-i18n="commuteTitle">Anfahrt & Mobilität</div>
+        <div class="form-group">
+          <label data-i18n="commuteLabel">Wie kommst du zur Arbeit?</label>
+          <div class="pill-group" id="commute-pills">
+            <label class="pill-label"><input type="checkbox" name="commute" value="public"><span data-i18n="commutePublic">ÖPNV</span></label>
+            <label class="pill-label"><input type="checkbox" name="commute" value="car"><span data-i18n="commuteCar">Auto</span></label>
+            <label class="pill-label"><input type="checkbox" name="commute" value="bike"><span data-i18n="commuteBike">Fahrrad</span></label>
+            <label class="pill-label"><input type="checkbox" name="commute" value="walk"><span data-i18n="commuteWalk">Zu Fuß</span></label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label data-i18n="driverLicense">Führerschein vorhanden?</label>
+          <div class="pill-group" id="license-pills">
+            <label class="pill-label"><input type="radio" name="driverLicense" value="yes"><span data-i18n="yes">Ja</span></label>
+            <label class="pill-label"><input type="radio" name="driverLicense" value="no"><span data-i18n="no">Nein</span></label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label><span data-i18n="workPermit">Arbeitserlaubnis</span> <span class="req">*</span></label>
+          <div class="pill-group" id="permit-pills">
+            <label class="pill-label"><input type="radio" name="workPermit" value="yes"><span data-i18n="yes">Ja</span></label>
+            <label class="pill-label"><input type="radio" name="workPermit" value="no"><span data-i18n="no">Nein</span></label>
+            <label class="pill-label"><input type="radio" name="workPermit" value="pending"><span data-i18n="inProgress">In Klärung</span></label>
+          </div>
+          <div class="error-msg" id="err-workPermit" data-i18n="errRequired">Pflichtfeld</div>
+        </div>
+        <div class="form-group" id="permit-note-wrap" style="display:none;">
+          <label data-i18n="workPermitNote">Bitte beschreibe deinen Status</label>
+          <input type="text" id="workPermitNote" data-i18n-ph="workPermitNotePh" placeholder="z.B. Aufenthaltstitel beantragt, EU-Bürger...">
+        </div>
+        <div class="form-group">
+          <label data-i18n="languages">Sprachen & Niveau</label>
+          <input type="text" id="languages" placeholder="z.B. Deutsch (C2), Kroatisch (Muttersprache)">
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title" data-i18n="availTitle">Verfügbarkeit</div>
+        <div class="form-group">
+          <label><span data-i18n="startDate">Frühester Eintrittstermin</span> <span class="req">*</span></label>
+          <input type="date" id="startDate">
+          <div class="error-msg" id="err-startDate" data-i18n="errRequired">Pflichtfeld</div>
+        </div>
+        <div class="form-group">
+          <label><span data-i18n="workType">Gewünschter Umfang</span> <span class="req">*</span></label>
+          <div class="pill-group" id="worktype-pills">
+            <label class="pill-label"><input type="radio" name="workType" value="fulltime"><span data-i18n="fullTime">Vollzeit</span></label>
+            <label class="pill-label"><input type="radio" name="workType" value="parttime"><span data-i18n="partTime">Teilzeit</span></label>
+            <label class="pill-label"><input type="radio" name="workType" value="minijob"><span data-i18n="miniJob">Minijob</span></label>
+          </div>
+          <div class="error-msg" id="err-workType" data-i18n="errRequired">Pflichtfeld</div>
+        </div>
+
+        <!-- Feste Arbeitszeiten (Vollzeit / Teilzeit) -->
+        <div id="schedule-info-wrap" style="display:none;">
+          <div class="schedule-info">
+            <div class="s-title" data-i18n="scheduleTitle">Unsere Arbeitszeiten</div>
+            <div class="s-row"><span class="s-icon">🗓</span><span data-i18n="scheduleMonFri">Mo – Fr: ca. 16:00 – 22:00 Uhr</span></div>
+            <div class="s-row"><span class="s-icon">☀️</span><span data-i18n="scheduleSatSun">Sa + So: 11:00 – 15:00 Uhr &amp; 16:30 – 22:00 Uhr</span></div>
+            <div class="s-row"><span class="s-icon">🎉</span><span data-i18n="scheduleEvents">Gelegentlich Gesellschaften mittags unter der Woche</span></div>
+          </div>
+        </div>
+
+        <!-- Tage nur bei Minijob -->
+        <div id="avail-days-wrap" style="display:none;">
+          <div class="form-group">
+            <label data-i18n="availDays">An welchen Tagen bist du verfügbar?</label>
+            <div class="pill-group" id="avail-pills">
+              <label class="pill-label"><input type="checkbox" name="avail" value="Mo"><span data-i18n="mo">Mo</span></label>
+              <label class="pill-label"><input type="checkbox" name="avail" value="Di"><span data-i18n="di">Di</span></label>
+              <label class="pill-label"><input type="checkbox" name="avail" value="Mi"><span data-i18n="mi">Mi</span></label>
+              <label class="pill-label"><input type="checkbox" name="avail" value="Do"><span data-i18n="do">Do</span></label>
+              <label class="pill-label"><input type="checkbox" name="avail" value="Fr"><span data-i18n="fr">Fr</span></label>
+              <label class="pill-label"><input type="checkbox" name="avail" value="Sa"><span data-i18n="sa">Sa</span></label>
+              <label class="pill-label"><input type="checkbox" name="avail" value="So"><span data-i18n="so">So</span></label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /step 1 -->
+
+    <!-- ── STEP 2: CAREER ── -->
+    <div class="step" data-step="2">
+      <div class="step-title" data-i18n="step2Title">Werdegang</div>
+      <div class="step-desc" data-i18n="step2Desc">Deine Erfahrungen & Ausbildung</div>
+
+      <div class="card">
+        <div class="form-group">
+          <label data-i18n="currentJob">Aktuelle / Letzte Tätigkeit</label>
+          <input type="text" id="currentJob" placeholder="z.B. Koch bei Restaurant XY">
+        </div>
+        <div class="row-2">
+          <div class="form-group">
+            <label data-i18n="experience">Berufserfahrung (Freitext)</label>
+            <textarea id="experienceText" rows="3" placeholder="Relevante Stationen..."></textarea>
+          </div>
+          <div class="form-group">
+            <label data-i18n="expYears">Davon Jahre</label>
+            <input type="number" id="experienceYears" inputmode="numeric" min="0" max="50" placeholder="0">
+          </div>
+        </div>
+        <div class="form-group">
+          <label data-i18n="education">Ausbildung / Abschluss</label>
+          <input type="text" id="education" placeholder="z.B. Koch-Ausbildung, Quereinsteiger...">
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title" data-i18n="cvTitle">Lebenslauf</div>
+        <div class="form-group">
+          <div class="file-btn" id="cv-btn" onclick="document.getElementById('cvInput').click()">
+            <span>📄</span><span id="cv-label" data-i18n="cvUpload">Lebenslauf hochladen (optional, PDF)</span>
+          </div>
+          <input type="file" id="cvInput" accept=".pdf" style="display:none" onchange="handleCvInput(this)">
+          <div class="hint" data-i18n="cvHint">Optional · Nur PDF · max. 5 MB</div>
+        </div>
+      </div>
+    </div><!-- /step 2 -->
+
+    <!-- ── STEP 3a: KITCHEN ── -->
+    <div class="step" data-step="3" data-area="kitchen">
+      <div class="step-title" data-i18n="step3kTitle">Küche – Fachliches</div>
+      <div class="step-desc" data-i18n="step3kDesc">Deine Erfahrungen in der Küche</div>
+
+      <div class="card">
+        <div class="form-group">
+          <label data-i18n="kitchenStations">Erfahrung an Posten (Mehrfachauswahl)</label>
+          <div class="pill-group" id="stations-pills">
+            <label class="pill-label"><input type="checkbox" name="station" value="cold"><span data-i18n="stationCold">Kalte Küche</span></label>
+            <label class="pill-label"><input type="checkbox" name="station" value="garnish"><span data-i18n="stationGarnish">Beilagen/Entremetier</span></label>
+            <label class="pill-label"><input type="checkbox" name="station" value="meat"><span data-i18n="stationMeat">Fleisch/Fisch</span></label>
+            <label class="pill-label"><input type="checkbox" name="station" value="dessert"><span data-i18n="stationDessert">Dessert</span></label>
+            <label class="pill-label"><input type="checkbox" name="station" value="dish"><span data-i18n="stationDish">Spülküche</span></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title" data-i18n="selfAssessment">Selbsteinschätzung (1 = niedrig, 5 = sehr hoch)</div>
+        <div class="rating-wrap">
+          <div class="rating-row">
+            <span class="rating-label" data-i18n="haccpLevel">HACCP / Hygienekenntnisse</span>
+            <div class="rating-btns" id="r-haccp"></div>
+          </div>
+          <div class="rating-row">
+            <span class="rating-label" data-i18n="speedLevel">Arbeitstempo bei vollem Haus</span>
+            <div class="rating-btns" id="r-speed"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="form-group">
+          <label><span data-i18n="stressKitchen">Beschreibe, wie du an einem stressigen Abend mit 80 Gästen den Überblick behältst.</span> <span class="req">*</span></label>
+          <textarea id="stressKitchen" rows="4"></textarea>
+          <div class="error-msg" id="err-stressKitchen" data-i18n="errRequired">Pflichtfeld</div>
+        </div>
+      </div>
+    </div><!-- /step 3a -->
+
+    <!-- ── STEP 3b: SERVICE ── -->
+    <div class="step" data-step="3" data-area="service">
+      <div class="step-title" data-i18n="step3sTitle">Service – Fachliches</div>
+      <div class="step-desc" data-i18n="step3sDesc">Deine Erfahrungen im Service</div>
+
+      <div class="card" style="border: 2px solid #ffc107; background: #fff8e1;">
+        <div class="card-title" style="color:#856404;" data-i18n="saturdayImportant">⭐ Wichtigste Frage zuerst</div>
+        <div class="form-group">
+          <label><span data-i18n="saturdayQ">Kannst du regelmäßig samstags arbeiten?</span> <span class="req">*</span></label>
+          <p class="hint" style="margin-bottom:8px;" data-i18n="saturdayHint">Samstag ist unser wichtigster Service-Tag.</p>
+          <div class="pill-group" id="saturday-pills">
+            <label class="pill-label"><input type="radio" name="saturday" value="every"><span data-i18n="satEvery">Ja, jeden Samstag</span></label>
+            <label class="pill-label"><input type="radio" name="saturday" value="mostly"><span data-i18n="satMostly">Ja, meistens</span></label>
+            <label class="pill-label"><input type="radio" name="saturday" value="sometimes"><span data-i18n="satSometimes">Nur gelegentlich</span></label>
+            <label class="pill-label"><input type="radio" name="saturday" value="no"><span data-i18n="satNo">Nein</span></label>
+          </div>
+          <div class="error-msg" id="err-saturday" data-i18n="errRequired">Pflichtfeld</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="form-group">
+          <label data-i18n="cashReg">Kassen- / Orderman-Erfahrung</label>
+          <div class="pill-group" id="cash-pills">
+            <label class="pill-label"><input type="radio" name="cashReg" value="yes"><span data-i18n="yes">Ja</span></label>
+            <label class="pill-label"><input type="radio" name="cashReg" value="no"><span data-i18n="no">Nein</span></label>
+          </div>
+        </div>
+        <div class="form-group" id="cash-system-wrap" style="display:none;">
+          <label data-i18n="cashSystem">Welches System?</label>
+          <input type="text" id="cashSystem" placeholder="z.B. Orderman, RKSV, Square...">
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title" data-i18n="selfAssessment">Selbsteinschätzung (1 = niedrig, 5 = sehr hoch)</div>
+        <div class="rating-wrap">
+          <div class="rating-row">
+            <span class="rating-label" data-i18n="wineLevel">Weinkenntnisse</span>
+            <div class="rating-btns" id="r-wine"></div>
+          </div>
+          <div class="rating-row">
+            <span class="rating-label" data-i18n="upsellingLevel">Upselling / Empfehlung</span>
+            <div class="rating-btns" id="r-upsell"></div>
+          </div>
+          <div class="rating-row">
+            <span class="rating-label" data-i18n="complaintLevel">Beschwerdemanagement</span>
+            <div class="rating-btns" id="r-complaint"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="form-group">
+          <label><span data-i18n="stressService">Ein Gast beschwert sich lautstark über sein Essen. Was machst du?</span> <span class="req">*</span></label>
+          <textarea id="stressService" rows="4"></textarea>
+          <div class="error-msg" id="err-stressService" data-i18n="errRequired">Pflichtfeld</div>
+        </div>
+      </div>
+    </div><!-- /step 3b -->
+
+    <!-- ── STEP 4: SELF-ASSESSMENT ── -->
+    <div class="step" data-step="4">
+      <div class="step-title" data-i18n="step4Title">Selbsteinschätzung</div>
+      <div class="step-desc" data-i18n="step4Desc">Bitte bewerte dich selbst ehrlich (1 = niedrig, 5 = sehr hoch)</div>
+      <div class="card">
+        <div class="rating-wrap">
+          <div class="rating-row"><span class="rating-label" data-i18n="reliability">Zuverlässigkeit / Pünktlichkeit</span><div class="rating-btns" id="r-reliability"></div></div>
+          <div class="rating-row"><span class="rating-label" data-i18n="teamwork">Teamfähigkeit</span><div class="rating-btns" id="r-teamwork"></div></div>
+          <div class="rating-row"><span class="rating-label" data-i18n="stressRes">Stressresistenz / Belastbarkeit</span><div class="rating-btns" id="r-stressres"></div></div>
+          <div class="rating-row"><span class="rating-label" data-i18n="physFit">Körperliche Belastbarkeit</span><div class="rating-btns" id="r-physfit"></div></div>
+          <div class="rating-row"><span class="rating-label" data-i18n="initiative">Eigeninitiative</span><div class="rating-btns" id="r-initiative"></div></div>
+          <div class="rating-row"><span class="rating-label" data-i18n="cleanliness">Sauberkeit / Ordnung</span><div class="rating-btns" id="r-clean"></div></div>
+          <div class="rating-row"><span class="rating-label" data-i18n="feedbackH">Umgang mit Kritik</span><div class="rating-btns" id="r-feedback"></div></div>
+        </div>
+      </div>
+    </div><!-- /step 4 -->
+
+    <!-- ── STEP 5: CHARACTER ── -->
+    <div class="step" data-step="5">
+      <div class="step-title" data-i18n="step5Title">Charakter & Motivation</div>
+      <div class="step-desc" data-i18n="step5Desc">Persönliche Fragen – beantworte sie so ehrlich wie möglich</div>
+      <div class="card">
+        <div class="form-group">
+          <label><span data-i18n="whyUs">Warum möchtest du genau bei uns arbeiten?</span> <span class="req">*</span></label>
+          <textarea id="whyUs" rows="3"></textarea>
+          <div class="error-msg" id="err-whyUs" data-i18n="errRequired">Pflichtfeld</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="form-group">
+          <label><span data-i18n="whyGastro">Was motiviert dich an der Arbeit in der Gastronomie?</span> <span class="req">*</span></label>
+          <textarea id="whyGastro" rows="3"></textarea>
+          <div class="error-msg" id="err-whyGastro" data-i18n="errRequired">Pflichtfeld</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="form-group">
+          <label data-i18n="handleCritique">Wie reagierst du, wenn dir jemand sagt, dass du etwas falsch gemacht hast?</label>
+          <textarea id="handleCritique" rows="3"></textarea>
+        </div>
+      </div>
+      <div class="card">
+        <div class="form-group">
+          <label data-i18n="expectations">Was erwartest du von einem guten Arbeitgeber / Team?</label>
+          <textarea id="expectations" rows="3"></textarea>
+        </div>
+      </div>
+      <div class="card">
+        <div class="form-group">
+          <label data-i18n="bigChallenge">Was war deine bisher größte Herausforderung im Job und wie hast du sie gelöst?</label>
+          <textarea id="bigChallenge" rows="3"></textarea>
+        </div>
+      </div>
+    </div><!-- /step 5 -->
+
+    <!-- ── STEP 6: PHOTO + DSGVO ── -->
+    <div class="step" data-step="6">
+      <div class="step-title" data-i18n="step6Title">Foto & Abschluss</div>
+      <div class="step-desc" data-i18n="step6Desc">Fast geschafft – bitte lade dein Bewerbungsfoto hoch</div>
+
+      <div class="card">
+        <div class="card-title" data-i18n="photoTitle">Bewerbungsfoto <span style="color:var(--red)">*</span></div>
+        <div class="photo-area" id="photo-area" onclick="document.getElementById('photoInput').click()">
+          <div id="photo-placeholder">
+            <div class="photo-placeholder">📷</div>
+            <div class="photo-hint" data-i18n="photoHint">Tippe hier, um ein Foto auszuwählen</div>
+            <div class="hint" style="margin-top:6px" data-i18n="photoHint2">JPG oder PNG · wird automatisch komprimiert</div>
+          </div>
+          <div id="photo-preview-wrap" style="display:none;">
+            <img id="photo-preview" class="photo-preview" src="" alt="Vorschau">
+            <div class="photo-change" data-i18n="photoChange">Foto ändern</div>
+          </div>
+        </div>
+        <input type="file" id="photoInput" accept="image/*" style="display:none" onchange="handlePhotoInput(this)">
+        <div class="error-msg" id="err-photo" data-i18n="errPhoto">Bitte lade ein Bewerbungsfoto hoch</div>
+      </div>
+
+      <div class="dsgvo-box">
+        <div class="dsgvo-check">
+          <input type="checkbox" id="dsgvoCheck" onchange="validateDsgvo()">
+          <label for="dsgvoCheck" data-i18n="dsgvoText">Ich stimme zu, dass meine Daten gemäß DSGVO für den Bewerbungsprozess gespeichert und verarbeitet werden. Die Daten werden ausschließlich für den Bewerbungsprozess verwendet und nicht an Dritte weitergegeben.</label>
+        </div>
+        <div class="error-msg" id="err-dsgvo" data-i18n="errDsgvo" style="margin-top:8px">Bitte stimme der Datenschutzerklärung zu</div>
+      </div>
+    </div><!-- /step 6 -->
+
+  </div><!-- /step-content -->
+
+  <div class="nav-bar" id="nav-bar">
+    <button class="btn-back" id="btn-back" onclick="prevStep()" data-i18n="back">Zurück</button>
+    <button class="btn-next" id="btn-next" onclick="nextStep()" data-i18n="next">Weiter</button>
+    <button class="btn-submit" id="btn-submit" onclick="submitApplication()" style="display:none;" data-i18n="submit">Bewerbung absenden</button>
+  </div>
+</div><!-- /form-screen -->
+
+<!-- ══════════════════════════════════════
+     SCREEN 3 – SUCCESS
+══════════════════════════════════════ -->
+<div id="success-screen" class="screen">
+  <div class="lang-logo"><img src="logo.png" alt="Am Fels"></div>
+  <div class="success-icon">🎉</div>
+  <h2 data-i18n="successTitle">Bewerbung eingegangen!</h2>
+  <p data-i18n="successText">Vielen Dank für deine Bewerbung. Wir melden uns so bald wie möglich bei dir!</p>
+</div>
+
+<!-- ── ERROR TOAST ── -->
+<div class="toast" id="toast"></div>
+
+<!-- ── LOADING OVERLAY ── -->
+<div class="loading-overlay" id="loading">
+  <div class="spinner"></div>
+  <div class="loading-text" id="loading-text" data-i18n="sending">Bewerbung wird gesendet…</div>
+</div>
+
+<!-- ══════════════════════════════════════
+     APP LOGIC (kein SDK nötig)
+══════════════════════════════════════ -->
+<script>
+// ╔══════════════════════════════════════╗
+// ║  BACKEND – Firebase Realtime DB REST ║
+// ╚══════════════════════════════════════╝
+var DB_URL = 'https://apfels-team-default-rtdb.europe-west1.firebasedatabase.app/bewerbungen';
+
+// ╔══════════════════════════════════════╗
+// ║  TRANSLATIONS                        ║
+// ╚══════════════════════════════════════╝
+var LANG = {
+  de: {
+    bewerbung:"Bewerbung", areaTitle:"Für welchen Bereich bewirbst du dich?",
+    areaDesc:"Wähle deinen gewünschten Arbeitsbereich",
+    kitchen:"Küche", kitchenSub:"Koch, Küchenhilfe, Spülküche",
+    service:"Service", serviceSub:"Kellner/in, Servicekraft",
+    step1Title:"Persönliche Daten", step1Desc:"Deine Kontaktinformationen",
+    firstName:"Vorname", lastName:"Nachname", birthDate:"Geburtsdatum",
+    zip:"PLZ", city:"Wohnort", phone:"Telefon", email:"E-Mail",
+    commuteTitle:"Anfahrt & Mobilität", commuteLabel:"Wie kommst du zur Arbeit?",
+    commutePublic:"ÖPNV", commuteCar:"Auto", commuteBike:"Fahrrad", commuteWalk:"Zu Fuß",
+    driverLicense:"Führerschein vorhanden?", workPermit:"Arbeitserlaubnis",
+    yes:"Ja", no:"Nein", inProgress:"In Klärung",
+    languages:"Sprachen & Niveau",
+    availTitle:"Verfügbarkeit",
+    startDate:"Frühester Eintrittstermin",
+    workType:"Gewünschter Umfang",
+    fullTime:"Vollzeit", partTime:"Teilzeit", miniJob:"Minijob",
+    workPermitNote:"Bitte beschreibe deinen Status",
+    workPermitNotePh:"z.B. Aufenthaltstitel beantragt, EU-Bürger...",
+    availDays:"An welchen Tagen bist du verfügbar?",
+    mo:"Mo", di:"Di", mi:"Mi", do:"Do", fr:"Fr", sa:"Sa", so:"So",
+    scheduleTitle:"Unsere Arbeitszeiten",
+    scheduleMonFri:"Mo – Fr: ca. 16:00 – 22:00 Uhr",
+    scheduleSatSun:"Sa + So: 11:00 – 15:00 Uhr & 16:30 – 22:00 Uhr",
+    scheduleEvents:"Gelegentlich Gesellschaften mittags unter der Woche",
+    step2Title:"Werdegang", step2Desc:"Deine Erfahrungen & Ausbildung",
+    currentJob:"Aktuelle / Letzte Tätigkeit",
+    experience:"Berufserfahrung (Freitext)", expYears:"Davon Jahre",
+    education:"Ausbildung / Abschluss",
+    cvTitle:"Lebenslauf", cvUpload:"Lebenslauf hochladen (optional, PDF)",
+    cvHint:"Optional · Nur PDF · max. 5 MB",
+    step3kTitle:"Küche – Fachliches", step3kDesc:"Deine Erfahrungen in der Küche",
+    kitchenStations:"Erfahrung an Posten (Mehrfachauswahl)",
+    stationCold:"Kalte Küche", stationGarnish:"Beilagen/Entremetier",
+    stationMeat:"Fleisch/Fisch", stationDessert:"Dessert", stationDish:"Spülküche",
+    selfAssessment:"Selbsteinschätzung (1 = niedrig, 5 = sehr hoch)",
+    haccpLevel:"HACCP / Hygienekenntnisse", speedLevel:"Arbeitstempo bei vollem Haus",
+    stressKitchen:"Beschreibe, wie du an einem stressigen Abend mit 80 Gästen den Überblick behältst.",
+    step3sTitle:"Service – Fachliches", step3sDesc:"Deine Erfahrungen im Service",
+    saturdayImportant:"⭐ Wichtigste Frage zuerst",
+    saturdayQ:"Kannst du regelmäßig samstags arbeiten?",
+    saturdayHint:"Samstag ist unser wichtigster Service-Tag.",
+    satEvery:"Ja, jeden Samstag", satMostly:"Ja, meistens",
+    satSometimes:"Nur gelegentlich", satNo:"Nein",
+    cashReg:"Kassen- / Orderman-Erfahrung", cashSystem:"Welches System?",
+    wineLevel:"Weinkenntnisse", upsellingLevel:"Upselling / Empfehlung",
+    complaintLevel:"Beschwerdemanagement",
+    stressService:"Ein Gast beschwert sich lautstark über sein Essen. Was machst du?",
+    step4Title:"Selbsteinschätzung",
+    step4Desc:"Bitte bewerte dich selbst ehrlich (1 = niedrig, 5 = sehr hoch)",
+    reliability:"Zuverlässigkeit / Pünktlichkeit", teamwork:"Teamfähigkeit",
+    stressRes:"Stressresistenz / Belastbarkeit", physFit:"Körperliche Belastbarkeit",
+    initiative:"Eigeninitiative", cleanliness:"Sauberkeit / Ordnung",
+    feedbackH:"Umgang mit Kritik",
+    step5Title:"Charakter & Motivation",
+    step5Desc:"Persönliche Fragen – beantworte sie so ehrlich wie möglich",
+    whyUs:"Warum möchtest du genau bei uns arbeiten?",
+    whyGastro:"Was motiviert dich an der Arbeit in der Gastronomie?",
+    handleCritique:"Wie reagierst du, wenn dir jemand sagt, dass du etwas falsch gemacht hast?",
+    expectations:"Was erwartest du von einem guten Arbeitgeber / Team?",
+    bigChallenge:"Was war deine bisher größte Herausforderung im Job und wie hast du sie gelöst?",
+    step6Title:"Foto & Abschluss", step6Desc:"Fast geschafft – bitte lade dein Bewerbungsfoto hoch",
+    photoTitle:"Bewerbungsfoto", photoHint:"Tippe hier, um ein Foto auszuwählen",
+    photoHint2:"JPG oder PNG · wird automatisch komprimiert",
+    photoChange:"Foto ändern",
+    dsgvoText:"Ich stimme zu, dass meine Daten gemäß DSGVO für den Bewerbungsprozess gespeichert und verarbeitet werden. Die Daten werden ausschließlich für den Bewerbungsprozess verwendet und nicht an Dritte weitergegeben.",
+    back:"Zurück", next:"Weiter", submit:"Bewerbung absenden",
+    sending:"Bewerbung wird gesendet…",
+    successTitle:"Bewerbung eingegangen!", successText:"Vielen Dank für deine Bewerbung. Wir melden uns so bald wie möglich bei dir!",
+    step:"Schritt", of:"von",
+    errRequired:"Pflichtfeld", errEmail:"Bitte gültige E-Mail eingeben",
+    errPhoto:"Bitte lade ein Bewerbungsfoto hoch", errDsgvo:"Bitte stimme der Datenschutzerklärung zu",
+    langPrompt:"Bitte wähle deine Sprache"
+  },
+  hr: {
+    bewerbung:"Prijava", areaTitle:"Za koji odjel se prijavljuješ?",
+    areaDesc:"Odaberi željeno radno mjesto",
+    kitchen:"Kuhinja", kitchenSub:"Kuhar, pomoć u kuhinji, pranje suđa",
+    service:"Sala", serviceSub:"Konobar/ica, uslužno osoblje",
+    step1Title:"Osobni podaci", step1Desc:"Tvoji kontaktni podaci",
+    firstName:"Ime", lastName:"Prezime", birthDate:"Datum rođenja",
+    zip:"Poštanski broj", city:"Mjesto stanovanja", phone:"Telefon", email:"E-pošta",
+    commuteTitle:"Prijevoz i mobilnost", commuteLabel:"Kako dolaziš na posao?",
+    commutePublic:"Javni prijevoz", commuteCar:"Automobil",
+    commuteBike:"Bicikl", commuteWalk:"Pješice",
+    driverLicense:"Imaš li vozačku dozvolu?", workPermit:"Radna dozvola",
+    yes:"Da", no:"Ne", inProgress:"U postupku",
+    languages:"Jezici & razina",
+    availTitle:"Dostupnost",
+    startDate:"Najraniji datum početka rada",
+    workType:"Željeni opseg rada",
+    fullTime:"Puno radno vrijeme", partTime:"Nepuno radno vrijeme",
+    miniJob:"Mini posao",
+    workPermitNote:"Molimo opiši svoj status",
+    workPermitNotePh:"npr. boravišna dozvola u postupku, državljanin EU...",
+    availDays:"Koji dani ti odgovaraju?",
+    mo:"Pon", di:"Uto", mi:"Sri", do:"Čet", fr:"Pet", sa:"Sub", so:"Ned",
+    scheduleTitle:"Naše radno vrijeme",
+    scheduleMonFri:"Pon – Pet: cca. 16:00 – 22:00 h",
+    scheduleSatSun:"Sub + Ned: 11:00 – 15:00 h i 16:30 – 22:00 h",
+    scheduleEvents:"Povremeno privatne proslave u podne tjedno",
+    step2Title:"Radno iskustvo", step2Desc:"Tvoje iskustvo i obrazovanje",
+    currentJob:"Trenutno / Zadnje radno mjesto",
+    experience:"Radno iskustvo (slobodni tekst)", expYears:"Godina iskustva",
+    education:"Obrazovanje / Kvalifikacija",
+    cvTitle:"Životopis", cvUpload:"Učitaj životopis (neobavezno, PDF)",
+    cvHint:"Neobavezno · Samo PDF · max. 5 MB",
+    step3kTitle:"Kuhinja – Stručno", step3kDesc:"Tvoje iskustvo u kuhinji",
+    kitchenStations:"Iskustvo na stanicama (višestruki odabir)",
+    stationCold:"Hladna kuhinja", stationGarnish:"Prilozi / Entremetier",
+    stationMeat:"Meso / Riba", stationDessert:"Desert", stationDish:"Pranje suđa",
+    selfAssessment:"Samoprocjena (1 = nisko, 5 = vrlo visoko)",
+    haccpLevel:"HACCP / Poznavanje higijene", speedLevel:"Brzina rada pri punoj kući",
+    stressKitchen:"Opiši kako održavaš pregled u stresnoj večeri s 80 gostiju.",
+    step3sTitle:"Sala – Stručno", step3sDesc:"Tvoje iskustvo u usluživanju",
+    saturdayImportant:"⭐ Najvažnije pitanje prvo",
+    saturdayQ:"Možeš li redovito raditi subotom?",
+    saturdayHint:"Subota je naš najvažniji dan za usluživanje.",
+    satEvery:"Da, svake subote", satMostly:"Da, uglavnom",
+    satSometimes:"Samo povremeno", satNo:"Ne",
+    cashReg:"Iskustvo s kasom / Ordermanom", cashSystem:"Koji sustav?",
+    wineLevel:"Poznavanje vina", upsellingLevel:"Prodaja / Preporuke (Upselling)",
+    complaintLevel:"Upravljanje pritužbama",
+    stressService:"Gost se glasno žali na hranu. Što radiš?",
+    step4Title:"Samoprocjena",
+    step4Desc:"Molimo procijeni se iskreno (1 = nisko, 5 = vrlo visoko)",
+    reliability:"Pouzdanost / Točnost", teamwork:"Timski rad",
+    stressRes:"Otpornost na stres / Izdržljivost", physFit:"Fizička izdržljivost",
+    initiative:"Vlastita inicijativa", cleanliness:"Čistoća / Red",
+    feedbackH:"Prihvaćanje kritike",
+    step5Title:"Karakter & Motivacija",
+    step5Desc:"Osobna pitanja – odgovori što iskrenije možeš",
+    whyUs:"Zašto se žele zaposliti baš kod nas?",
+    whyGastro:"Što te motivira na radu u ugostiteljstvu?",
+    handleCritique:"Kako reagiraš kad ti netko kaže da si nešto pogriješio/la?",
+    expectations:"Što očekuješ od dobrog poslodavca / tima?",
+    bigChallenge:"Koji je bio tvoj najveći izazov na poslu i kako si ga riješio/la?",
+    step6Title:"Fotografija & Završetak",
+    step6Desc:"Gotovo – molimo učitaj svoju fotografiju za prijavu",
+    photoTitle:"Fotografija za prijavu",
+    photoHint:"Tapni ovdje za odabir fotografije",
+    photoHint2:"JPG ili PNG · automatski se komprimira",
+    photoChange:"Promijeni fotografiju",
+    dsgvoText:"Suglasan/na sam da se moji podaci pohranjuju i obrađuju sukladno GDPR-u za potrebe prijave. Podaci se koriste isključivo u svrhu zapošljavanja i ne prenose se trećim stranama.",
+    back:"Natrag", next:"Dalje", submit:"Pošalji prijavu",
+    sending:"Prijava se šalje…",
+    successTitle:"Prijava primljena!", successText:"Hvala ti na prijavi. Javit ćemo ti se što je prije moguće!",
+    step:"Korak", of:"od",
+    errRequired:"Obavezno polje", errEmail:"Unesite ispravnu e-mail adresu",
+    errPhoto:"Molimo učitaj fotografiju za prijavu",
+    errDsgvo:"Molimo potvrdi izjavu o zaštiti podataka",
+    langPrompt:"Odaberi jezik"
+  }
+};
+
+// ╔══════════════════════════════════════╗
+// ║  STATE                               ║
+// ╚══════════════════════════════════════╝
+var state = { lang: 'de', area: null, step: 1, photoBlob: null, cvFile: null };
+var TOTAL_STEPS = 6;
+
+// ╔══════════════════════════════════════╗
+// ║  INIT                                ║
+// ╚══════════════════════════════════════╝
+document.addEventListener('DOMContentLoaded', function() {
+  initRatingButtons();
+  initPillListeners();
+  initCashRegListener();
+  initWorkTypeListener();
+  initWorkPermitListener();
+  buildProgressDots();
+  checkForSavedProgress();
+  // Auto-save on every input/change
+  document.addEventListener('input',  saveProgress);
+  document.addEventListener('change', saveProgress);
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').catch(function(){});
+  }
+});
+
+// ╔══════════════════════════════════════╗
+// ║  LANGUAGE                            ║
+// ╚══════════════════════════════════════╝
+function setLang(l) {
+  state.lang = l;
+  updateI18n();
+  showScreen('area-screen');
+}
+function toggleLang() {
+  state.lang = state.lang === 'de' ? 'hr' : 'de';
+  updateI18n();
+}
+function _(key) {
+  return LANG[state.lang][key] || key;
+}
+function updateI18n() {
+  document.querySelectorAll('[data-i18n]').forEach(function(el) {
+    var key = el.getAttribute('data-i18n');
+    var val = _(key);
+    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+      el.placeholder = val;
+    } else {
+      el.textContent = val;
+    }
+  });
+  document.getElementById('lang-prompt').textContent = _('langPrompt');
+  updateProgressLabel();
+  updateFormAreaBadge();
+}
+
+// ╔══════════════════════════════════════╗
+// ║  SCREENS                             ║
+// ╚══════════════════════════════════════╝
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// ╔══════════════════════════════════════╗
+// ║  AREA                                ║
+// ╚══════════════════════════════════════╝
+function setArea(area) {
+  state.area = area;
+  state.step = 1;
+  updateFormAreaBadge();
+  showScreen('form-screen');
+  goToStep(1);
+}
+function updateFormAreaBadge() {
+  var badge = document.getElementById('form-area-badge');
+  if (badge && state.area) {
+    badge.textContent = _(state.area === 'kitchen' ? 'kitchen' : 'service');
+  }
+}
+
+// ╔══════════════════════════════════════╗
+// ║  STEPS                               ║
+// ╚══════════════════════════════════════╝
+function goToStep(n) {
+  state.step = n;
+  document.querySelectorAll('.step').forEach(function(s) {
+    var stepNum = parseInt(s.getAttribute('data-step'));
+    var stepArea = s.getAttribute('data-area');
+    var isThisStep = stepNum === n;
+    var areaMatch = !stepArea || stepArea === state.area;
+    s.classList.toggle('active', isThisStep && areaMatch);
+  });
+  updateProgressDots();
+  updateProgressLabel();
+  updateNavButtons();
+  saveProgress();
+  window.scrollTo(0, 0);
+}
+function prevStep() {
+  if (state.step > 1) goToStep(state.step - 1);
+  else showScreen('area-screen');
+}
+function nextStep() {
+  if (!validateStep(state.step)) return;
+  if (state.step < TOTAL_STEPS) goToStep(state.step + 1);
+}
+
+// ╔══════════════════════════════════════╗
+// ║  PROGRESS                            ║
+// ╚══════════════════════════════════════╝
+function buildProgressDots() {
+  var wrap = document.getElementById('prog-steps');
+  wrap.innerHTML = '';
+  for (var i = 1; i <= TOTAL_STEPS; i++) {
+    var d = document.createElement('div');
+    d.className = 'prog-dot';
+    d.id = 'dot-' + i;
+    wrap.appendChild(d);
+  }
+}
+function updateProgressDots() {
+  for (var i = 1; i <= TOTAL_STEPS; i++) {
+    var d = document.getElementById('dot-' + i);
+    if (!d) continue;
+    d.className = 'prog-dot' + (i < state.step ? ' done' : (i === state.step ? ' active' : ''));
+  }
+}
+function updateProgressLabel() {
+  var el = document.getElementById('prog-label');
+  if (el) el.textContent = _('step') + ' ' + state.step + ' ' + _('of') + ' ' + TOTAL_STEPS;
+}
+function updateNavButtons() {
+  var back   = document.getElementById('btn-back');
+  var next   = document.getElementById('btn-next');
+  var submit = document.getElementById('btn-submit');
+  if (state.step === TOTAL_STEPS) {
+    next.style.display   = 'none';
+    submit.style.display = '';
+  } else {
+    next.style.display   = '';
+    submit.style.display = 'none';
+  }
+}
+
+// ╔══════════════════════════════════════╗
+// ║  PILL LISTENERS                      ║
+// ╚══════════════════════════════════════╝
+function initPillListeners() {
+  document.querySelectorAll('.pill-label').forEach(function(label) {
+    label.addEventListener('click', function() {
+      var input = this.querySelector('input');
+      if (!input) return;
+      if (input.type === 'radio') {
+        var name = input.name;
+        document.querySelectorAll('input[name="' + name + '"]').forEach(function(r) {
+          r.closest('.pill-label').classList.remove('selected');
+        });
+        this.classList.add('selected');
+        input.checked = true;
+      } else {
+        input.checked = !input.checked;
+        this.classList.toggle('selected', input.checked);
+      }
+    });
+  });
+}
+function initCashRegListener() {
+  document.querySelectorAll('input[name="cashReg"]').forEach(function(r) {
+    r.addEventListener('change', function() {
+      document.getElementById('cash-system-wrap').style.display = (this.value === 'yes') ? '' : 'none';
+    });
+  });
+}
+
+function initWorkTypeListener() {
+  document.querySelectorAll('input[name="workType"]').forEach(function(r) {
+    r.addEventListener('change', function() {
+      var isMinijob = this.value === 'minijob';
+      var isFixed   = this.value === 'fulltime' || this.value === 'parttime';
+      document.getElementById('avail-days-wrap').style.display    = isMinijob ? '' : 'none';
+      document.getElementById('schedule-info-wrap').style.display = isFixed   ? '' : 'none';
+    });
+  });
+}
+
+function initWorkPermitListener() {
+  document.querySelectorAll('input[name="workPermit"]').forEach(function(r) {
+    r.addEventListener('change', function() {
+      document.getElementById('permit-note-wrap').style.display = (this.value === 'pending') ? '' : 'none';
+    });
+  });
+}
+
+// ╔══════════════════════════════════════╗
+// ║  RATING BUTTONS                      ║
+// ╚══════════════════════════════════════╝
+var ratingIds = ['haccp','speed','wine','upsell','complaint','reliability','teamwork','stressres','physfit','initiative','clean','feedback'];
+function initRatingButtons() {
+  ratingIds.forEach(function(id) {
+    var wrap = document.getElementById('r-' + id);
+    if (!wrap) return;
+    for (var i = 1; i <= 5; i++) {
+      (function(val) {
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'r-btn';
+        btn.textContent = val;
+        btn.setAttribute('data-val', val);
+        btn.setAttribute('data-id', id);
+        btn.addEventListener('click', function() {
+          var rid = this.getAttribute('data-id');
+          document.querySelectorAll('.r-btn[data-id="' + rid + '"]').forEach(function(b) {
+            b.classList.remove('selected');
+          });
+          this.classList.add('selected');
+        });
+        wrap.appendChild(btn);
+      })(i);
+    }
+  });
+}
+function getRating(id) {
+  var sel = document.querySelector('.r-btn[data-id="' + id + '"].selected');
+  return sel ? parseInt(sel.getAttribute('data-val')) : 0;
+}
+
+// ╔══════════════════════════════════════╗
+// ║  PHOTO COMPRESSION                   ║
+// ╚══════════════════════════════════════╝
+function handlePhotoInput(input) {
+  var file = input.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var img = new Image();
+    img.onload = function() {
+      var canvas = document.createElement('canvas');
+      var maxW = 800;
+      var w = img.width, h = img.height;
+      if (w > maxW) { h = Math.round(h * maxW / w); w = maxW; }
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      canvas.toBlob(function(blob) {
+        state.photoBlob = blob;
+        var url = URL.createObjectURL(blob);
+        document.getElementById('photo-preview').src = url;
+        document.getElementById('photo-placeholder').style.display = 'none';
+        document.getElementById('photo-preview-wrap').style.display = '';
+        document.getElementById('photo-area').classList.add('has-photo');
+        document.getElementById('err-photo').classList.remove('show');
+      }, 'image/jpeg', 0.82);
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+function handleCvInput(input) {
+  var file = input.files[0];
+  if (!file) return;
+  state.cvFile = file;
+  var btn = document.getElementById('cv-btn');
+  btn.classList.add('has-file');
+  btn.querySelector('#cv-label').textContent = '✓ ' + file.name;
+}
+function validateDsgvo() {
+  var checked = document.getElementById('dsgvoCheck').checked;
+  document.getElementById('err-dsgvo').classList.toggle('show', !checked);
+}
+
+// ╔══════════════════════════════════════╗
+// ║  VALIDATION                          ║
+// ╚══════════════════════════════════════╝
+function required(id) {
+  var el = document.getElementById(id);
+  var val = el ? el.value.trim() : '';
+  var errEl = document.getElementById('err-' + id);
+  if (!val) {
+    if (el) el.classList.add('error');
+    if (errEl) errEl.classList.add('show');
+    return false;
+  }
+  if (el) el.classList.remove('error');
+  if (errEl) errEl.classList.remove('show');
+  return true;
+}
+function requiredRadio(name, errId) {
+  var checked = document.querySelector('input[name="' + name + '"]:checked');
+  var errEl = document.getElementById(errId);
+  if (!checked) { if (errEl) errEl.classList.add('show'); return false; }
+  if (errEl) errEl.classList.remove('show');
+  return true;
+}
+function validateStep(n) {
+  var ok = true;
+  if (n === 1) {
+    ok = required('firstName') & required('lastName') & required('birthDate') &
+         required('phone') & required('email') &
+         requiredRadio('workPermit','err-workPermit') &
+         requiredRadio('workType','err-workType') &
+         required('startDate');
+    var emailEl = document.getElementById('email');
+    if (emailEl && emailEl.value && !/\S+@\S+\.\S+/.test(emailEl.value)) {
+      emailEl.classList.add('error');
+      document.getElementById('err-email').classList.add('show');
+      ok = false;
+    }
+  } else if (n === 3) {
+    if (state.area === 'kitchen') {
+      ok = required('stressKitchen');
+    } else {
+      ok = requiredRadio('saturday','err-saturday') & required('stressService');
+    }
+  } else if (n === 5) {
+    ok = required('whyUs') & required('whyGastro');
+  } else if (n === 6) {
+    if (!state.photoBlob) {
+      document.getElementById('err-photo').classList.add('show');
+      ok = false;
+    }
+    if (!document.getElementById('dsgvoCheck').checked) {
+      document.getElementById('err-dsgvo').classList.add('show');
+      ok = false;
+    }
+  }
+  if (!ok) {
+    var firstErr = document.querySelector('.error, .error-msg.show');
+    if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+  return !!ok;
+}
+
+// ╔══════════════════════════════════════╗
+// ║  DATA COLLECTION                     ║
+// ╚══════════════════════════════════════╝
+function getChecked(name) {
+  return Array.from(document.querySelectorAll('input[name="' + name + '"]:checked')).map(function(c) { return c.value; });
+}
+function getRadio(name) {
+  var c = document.querySelector('input[name="' + name + '"]:checked');
+  return c ? c.value : '';
+}
+function val(id) {
+  var el = document.getElementById(id);
+  return el ? el.value.trim() : '';
+}
+function collectFormData() {
+  var data = {
+    lang: state.lang,
+    area: state.area,
+    status: 'neu',
+    timestamp: Date.now(),
+    firstName: val('firstName'), lastName: val('lastName'),
+    birthDate: val('birthDate'), zip: val('zip'), city: val('city'),
+    phone: val('phone'), email: val('email'),
+    commute: getChecked('commute'), driverLicense: getRadio('driverLicense'),
+    workPermit: getRadio('workPermit'), languages: val('languages'),
+    startDate: val('startDate'), workType: getRadio('workType'),
+    availability: getChecked('avail'),
+    workPermitNote: val('workPermitNote'),
+    currentJob: val('currentJob'), experienceText: val('experienceText'),
+    experienceYears: val('experienceYears'), education: val('education'),
+    selfAssessment: {
+      reliability: getRating('reliability'), teamwork: getRating('teamwork'),
+      stressResistance: getRating('stressres'), physicalFitness: getRating('physfit'),
+      initiative: getRating('initiative'), cleanliness: getRating('clean'),
+      feedbackHandling: getRating('feedback')
+    },
+    whyUs: val('whyUs'), whyGastro: val('whyGastro'),
+    handleCritique: val('handleCritique'), expectations: val('expectations'),
+    bigChallenge: val('bigChallenge'),
+    photoUrl: '', cvUrl: ''
+  };
+  if (state.area === 'kitchen') {
+    data.kitchen = {
+      stations: getChecked('station'),
+      haccpLevel: getRating('haccp'), speedLevel: getRating('speed'),
+      stressAnswer: val('stressKitchen')
+    };
+  } else {
+    data.service = {
+      saturday: getRadio('saturday'),
+      cashRegister: getRadio('cashReg'), cashRegisterSystem: val('cashSystem'),
+      wineLevel: getRating('wine'), upsellingLevel: getRating('upsell'),
+      complaintLevel: getRating('complaint'), stressAnswer: val('stressService')
+    };
+  }
+  return data;
+}
+
+// ╔══════════════════════════════════════╗
+// ║  SUBMIT                              ║
+// ╚══════════════════════════════════════╝
+function submitApplication() {
+  if (!validateStep(6)) {
+    var missing = [];
+    if (!state.photoBlob) missing.push(state.lang === 'hr' ? 'Fotografija' : 'Bewerbungsfoto');
+    if (!document.getElementById('dsgvoCheck').checked) missing.push('Datenschutz-Zustimmung');
+    if (missing.length) showToast('⚠️ ' + missing.join(' & ') + ' fehlt');
+    return;
+  }
+
+  showLoading(true);
+  var formData = collectFormData();
+
+  // Embed photo as base64
+  if (state.photoBlob) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      formData.photoBase64 = e.target.result;
+      saveToDb(formData);
+    };
+    reader.readAsDataURL(state.photoBlob);
+  } else {
+    saveToDb(formData);
+  }
+}
+
+function saveToDb(formData) {
+  fetch(DB_URL + '.json', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(formData)
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(result) {
+    if (result.name) {
+      // Notify via GitHub Issue (silent, non-blocking)
+      notifyGitHub(formData, result.name);
+      clearProgress();
+      showLoading(false);
+      showScreen('success-screen');
+    } else {
+      throw new Error(JSON.stringify(result));
+    }
+  })
+  .catch(function(err) {
+    showLoading(false);
+    showToast('❌ Fehler beim Senden: ' + err.message);
+    console.error(err);
+  });
+}
+
+function notifyGitHub(data, appId) {
+  // Benachrichtigung erfolgt über Admin-Dashboard (Push-Benachrichtigung beim nächsten Öffnen)
+  // GitHub-Token wird aus Sicherheitsgründen nicht im Client-Code gespeichert
+}
+
+function showToast(msg, duration) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(function() { t.classList.remove('show'); }, duration || 4000);
+}
+
+function showLoading(show) {
+  document.getElementById('loading').classList.toggle('show', show);
+}
+
+// ╔══════════════════════════════════════╗
+// ║  PERSIST – localStorage              ║
+// ╚══════════════════════════════════════╝
+var STORAGE_KEY = 'amfels_bew_v1';
+
+function saveProgress() {
+  try {
+    var data = { lang: state.lang, area: state.area, step: state.step, fields: {}, checked: {} };
+    document.querySelectorAll('input[id], textarea[id], select[id]').forEach(function(el) {
+      if (el.type !== 'file' && el.type !== 'checkbox' && el.type !== 'radio') {
+        data.fields[el.id] = el.value;
+      }
+    });
+    document.querySelectorAll('input[type="checkbox"][name], input[type="radio"][name]').forEach(function(el) {
+      data.checked[el.name + '|' + el.value] = el.checked;
+    });
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  } catch(e) {}
+}
+
+function loadProgress() {
+  try {
+    var saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    if (!saved || !saved.area) return false;
+    state.lang = saved.lang || 'de';
+    state.area = saved.area;
+    state.step = saved.step || 1;
+    // Restore text fields
+    if (saved.fields) {
+      Object.keys(saved.fields).forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) el.value = saved.fields[id];
+      });
+    }
+    // Restore checkboxes / radios
+    if (saved.checked) {
+      Object.keys(saved.checked).forEach(function(key) {
+        var parts = key.split('|');
+        var el = document.querySelector('input[name="' + parts[0] + '"][value="' + parts[1] + '"]');
+        if (el) {
+          el.checked = saved.checked[key];
+          var pill = el.closest('.pill-label');
+          if (pill) pill.classList.toggle('selected', el.checked);
+        }
+      });
+    }
+    // Trigger conditional UI updates
+    var permitChecked = document.querySelector('input[name="workPermit"]:checked');
+    if (permitChecked) document.getElementById('permit-note-wrap').style.display = (permitChecked.value === 'pending') ? '' : 'none';
+    var wtChecked = document.querySelector('input[name="workType"]:checked');
+    if (wtChecked) {
+      document.getElementById('avail-days-wrap').style.display    = wtChecked.value === 'minijob' ? '' : 'none';
+      document.getElementById('schedule-info-wrap').style.display = (wtChecked.value === 'fulltime' || wtChecked.value === 'parttime') ? '' : 'none';
+    }
+    var cashChecked = document.querySelector('input[name="cashReg"]:checked');
+    if (cashChecked) document.getElementById('cash-system-wrap').style.display = cashChecked.value === 'yes' ? '' : 'none';
+    return true;
+  } catch(e) { return false; }
+}
+
+function clearProgress() {
+  localStorage.removeItem(STORAGE_KEY);
+}
+
+function continueApplication() {
+  if (loadProgress()) {
+    updateI18n();
+    updateFormAreaBadge();
+    showScreen('form-screen');
+    goToStep(state.step);
+  }
+}
+
+function startFresh() {
+  clearProgress();
+  document.getElementById('continue-banner').style.display = 'none';
+}
+
+function checkForSavedProgress() {
+  try {
+    var saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    if (saved && saved.area && saved.step > 1) {
+      var banner = document.getElementById('continue-banner');
+      banner.style.display = '';
+      // Bilingual continue text
+      var txt = saved.lang === 'hr'
+        ? 'Imaš <strong>nedovršenu prijavu</strong> – želiš li nastaviti?'
+        : 'Du hast eine <strong>angefangene Bewerbung</strong> – möchtest du weitermachen?';
+      document.getElementById('continue-text').innerHTML = txt;
+    }
+  } catch(e) {}
+}
+</script>
+</body>
+</html>
