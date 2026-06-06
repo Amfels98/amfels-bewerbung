@@ -832,13 +832,14 @@ document.addEventListener('DOMContentLoaded', function() {
   initWorkTypeListener();
   initWorkPermitListener();
   buildProgressDots();
-  checkForSavedProgress();
   // Auto-save on every input/change
   document.addEventListener('input',  saveProgress);
   document.addEventListener('change', saveProgress);
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js').catch(function(){});
   }
+  // Auto-restore: wenn gespeicherter Fortschritt → direkt weitermachen, kein Banner
+  autoRestore();
 });
 
 // ╔══════════════════════════════════════╗
@@ -1353,18 +1354,20 @@ function startFresh() {
   document.getElementById('continue-banner').style.display = 'none';
 }
 
-function checkForSavedProgress() {
+function autoRestore() {
   try {
     var saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
-    if (saved && saved.area && saved.step > 1) {
-      var banner = document.getElementById('continue-banner');
-      banner.style.display = '';
-      // Bilingual continue text
-      var txt = saved.lang === 'hr'
-        ? 'Imaš <strong>nedovršenu prijavu</strong> – želiš li nastaviti?'
-        : 'Du hast eine <strong>angefangene Bewerbung</strong> – möchtest du weitermachen?';
-      document.getElementById('continue-text').innerHTML = txt;
+    if (saved && saved.area) {
+      // Fortschritt vorhanden → direkt wiederherstellen, keine Sprachauswahl
+      if (loadProgress()) {
+        updateI18n();
+        updateFormAreaBadge();
+        showScreen('form-screen');
+        goToStep(state.step);
+        showToast(state.lang === 'hr' ? '↩ Nastavljeno' : '↩ Fortschritt wiederhergestellt', 2500);
+      }
     }
+    // Kein gespeicherter Fortschritt → Sprachauswahl bleibt (Standard)
   } catch(e) {}
 }
 </script>
