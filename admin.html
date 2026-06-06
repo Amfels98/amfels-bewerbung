@@ -114,6 +114,12 @@
     .act-abgelehnt{background:#fee2e2;color:var(--red);}
     .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:190;}
     .overlay.show{display:block;}
+    /* PHOTO LIGHTBOX */
+    #lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:500;align-items:center;justify-content:center;cursor:zoom-out;}
+    #lightbox.show{display:flex;}
+    #lightbox img{max-width:92vw;max-height:92vh;border-radius:16px;box-shadow:0 8px 40px rgba(0,0,0,0.6);}
+    .d-photo{cursor:zoom-in;transition:opacity 0.15s;}
+    .d-photo:hover{opacity:0.88;}
 
     @media(max-width:600px){
       .filters{padding:10px 12px;}
@@ -182,6 +188,7 @@
 </div>
 
 <div class="overlay" id="overlay" onclick="closeDetail()"></div>
+<div id="lightbox" onclick="closeLightbox()"><img id="lightbox-img" src="" alt="Foto"></div>
 <div id="detail-panel">
   <div class="d-header">
     <h3 id="d-title">Bewerbung</h3>
@@ -400,7 +407,7 @@ function openDetail(id) {
 
   document.getElementById('d-body').innerHTML =
     (app.photoBase64
-      ? '<img class="d-photo" src="'+app.photoBase64+'">'
+      ? '<img class="d-photo" src="'+app.photoBase64+'" onclick="openLightbox(\''+app._id+'\')" title="Zum Vergrößern klicken">'
       : '<div class="d-ph">👤</div>')
     +'<div class="d-name">'+esc(app.firstName||'')+' '+esc(app.lastName||'')+'</div>'
     +'<div class="d-meta-row">'
@@ -468,6 +475,17 @@ function setStatus(status) {
 }
 
 // ── HELPERS ──
+function openLightbox(id) {
+  var app = allApps.find(function(a){ return a._id===id; });
+  if (!app || !app.photoBase64) return;
+  document.getElementById('lightbox-img').src = app.photoBase64;
+  document.getElementById('lightbox').classList.add('show');
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('show');
+}
+document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeLightbox(); });
+
 function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function cap(s){ return s?(s[0].toUpperCase()+s.slice(1)):s; }
 function dr(k,v){ return '<div class="d-row"><span class="dk">'+k+'</span><span class="dv">'+(v||'–')+'</span></div>'; }
